@@ -64,30 +64,30 @@ async def start(client, message):
                 [
                     [
                         InlineKeyboardButton(f"Play", callback_data='help_play'),
-                        InlineKeyboardButton(f"Settings", callback_data=f"help_settings"),
-                        InlineKeyboardButton(f"Recording", callback_data='help_record'),
+                        InlineKeyboardButton(f"Cài đặt", callback_data=f"help_settings"),
+                        InlineKeyboardButton(f"Ghi lại", callback_data='help_record'),
                     ],
                     [
-                        InlineKeyboardButton("Scheduling", callback_data="help_schedule"),
-                        InlineKeyboardButton("Controling", callback_data='help_control'),
+                        InlineKeyboardButton("Lập lịch trình", callback_data="help_schedule"),
+                        InlineKeyboardButton("Kiểm soát", callback_data='help_control'),
                         InlineKeyboardButton("Admins", callback_data="help_admin"),
                     ],
                     [
-                        InlineKeyboardButton(f"Misc", callback_data='help_misc'),
+                        InlineKeyboardButton(f"Linh tinh", callback_data='help_misc'),
                         InlineKeyboardButton("Close", callback_data="close"),
                     ],
                 ]
                 )
-            await message.reply("Learn to use the VCPlayer, Showing help menu, Choose from the below options.",
+            await message.reply("Tìm hiểu cách sử dụng. Hiển thị menu trợ giúp, Chọn từ các tùy chọn bên dưới.",
                 reply_markup=reply_markup,
                 disable_web_page_preview=True
                 )
         elif 'sch' in message.command[1]:
-            msg=await message.reply("Checking schedules..")
+            msg=await message.reply("Kiểm tra lịch trình..")
             you, me = message.command[1].split("_", 1)
             who=Config.SCHEDULED_STREAM.get(me)
             if not who:
-                return await msg.edit("Something gone somewhere.")
+                return await msg.edit("Một cái gì đó đã biến mất ở đâu đó.")
             del Config.SCHEDULED_STREAM[me]
             whom=f"{message.chat.id}_{msg.message_id}"
             Config.SCHEDULED_STREAM[whom] = who
@@ -122,7 +122,7 @@ async def start(client, message):
                     f.append(InlineKeyboardButton(text=f"{k}",callback_data=f"sch_month_{year_}_{month}_{d}"))
                 button.append(f)
             button.append([InlineKeyboardButton("Close", callback_data="schclose")])
-            await msg.edit(f"Choose the day of the month you want to schedule the voicechat.\nToday is {thisday} {smonth} {year}. Chooosing a date preceeding today will be considered as next year {year+1}", reply_markup=InlineKeyboardMarkup(button))
+            await msg.edit(f"Chọn ngày trong tháng bạn muốn lên lịch trò chuyện thoại.\nToday is {thisday} {smonth} {year}. Chooosing a date preceeding today will be considered as next year {year+1}", reply_markup=InlineKeyboardMarkup(button))
 
 
 
