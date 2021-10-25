@@ -62,14 +62,14 @@ async def import_playlist(client, m: Message):
     with suppress(MessageIdInvalid, MessageNotModified):
         if m.reply_to_message is not None and m.reply_to_message.document:
             if m.reply_to_message.document.file_name != "PlayList.json":
-                k=await m.reply("Invalid PlayList file given. Export your current Playlist using /export.")
+                k=await m.reply("Đã cung cấp tệp PlayList không hợp lệ. Xuất Danh sách phát hiện tại của bạn bằng /export.")
                 await delete_messages([m, k])
                 return
             myplaylist=await m.reply_to_message.download()
-            status=await m.reply("Trying to get details from playlist.")
+            status=await m.reply("Cố gắng lấy thông tin chi tiết từ danh sách phát.")
             n=await import_play_list(myplaylist)
             if not n:
-                await status.edit("Errors Occured while importing playlist.")
+                await status.edit("Đã xảy ra lỗi khi nhập danh sách phát.")
                 await delete_messages([m, status])
                 return
             if Config.SHUFFLE:
@@ -85,5 +85,5 @@ async def import_playlist(client, m: Message):
             else:
                 await delete_messages([m, status])
         else:
-            k = await m.reply("No playList file given.")
+            k = await m.reply("Không có tệp playList nào được cung cấp.")
             await delete_messages([m, k])
