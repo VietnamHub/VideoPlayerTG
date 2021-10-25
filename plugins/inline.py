@@ -31,8 +31,8 @@ from pyrogram import (
 
 buttons = [
     [
-        InlineKeyboardButton('⚡️ryo', url='https://t.me/ryostar'),
-        InlineKeyboardButton('🧩 Join Here', url='https://t.me/yeu69'),
+        InlineKeyboardButton('⚡️ Nhóm', url='https://t.me/yeu69'),
+        InlineKeyboardButton('🧩 Join Here', url='https://t.me/joinchat/BvHYpFNhr9o1M2Y9'),
     ]
     ]
 def get_cmd(dur):
@@ -47,7 +47,7 @@ async def search(client, query):
         answers.append(
             InlineQueryResultArticle(
                 title="Deploy",
-                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n\n<b>You can't use this bot in your group, for that you have to make your own bot from the below.</b>", disable_web_page_preview=True),
+                input_message_content=InputTextMessageContent(f"{Config.REPLY_MESSAGE}\n\n<b>Bạn không thể sử dụng bot này trong nhóm của mình, vì vậy bạn phải tạo bot của riêng mình từ bên dưới.</b>", disable_web_page_preview=True),
                 reply_markup=InlineKeyboardMarkup(buttons)
                 )
             )
@@ -58,7 +58,7 @@ async def search(client, query):
         await client.answer_inline_query(
             query.id,
             results=answers,
-            switch_pm_text=("Search a youtube video"),
+            switch_pm_text=("Tìm kiếm video trên youtube"),
             switch_pm_parameter="help",
             cache_time=0
         )
@@ -68,7 +68,7 @@ async def search(client, query):
             answers.append(
                 InlineQueryResultArticle(
                     title=v["title"],
-                    description=("Duration: {} Views: {}").format(
+                    description=("Thời lượng: {} Views: {}").format(
                         v["duration"],
                         v["viewCount"]["short"]
                     ),
