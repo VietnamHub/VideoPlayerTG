@@ -53,7 +53,7 @@ IST = pytz.timezone(Config.TIME_ZONE)
 if Config.DATABASE_URI:
     from utils import db
 
-HOME_TEXT = "<b>Hey  [{}](tg://user?id={}) 🙋‍♂️\n\nIam A Bot Built To Play or Stream Videos In Telegram VoiceChats.\nI Can Stream Any YouTube Video Or A Telegram File Or Even A YouTube Live.</b>"
+HOME_TEXT = "<b>Hey  [{}](tg://user?id={}) 🙋‍♂️\n\nTôi là Bot được xây dựng để phát hoặc phát trực tuyến video trong Telegram VoiceChats..\nTôi có thể phát trực tuyến bất kỳ video nào trên YouTube hoặc tệp Telegram hoặc thậm chí là trực tiếp trên YouTube.</b>"
 admin_filter=filters.create(is_admin) 
 
 @Client.on_message(filters.command(['start', f"start@{Config.BOT_USERNAME}"]))
@@ -129,12 +129,12 @@ async def start(client, message):
         return
     buttons = [
         [
-            InlineKeyboardButton('⚙️ Update Channel', url='https://t.me/yeu69'),
-            InlineKeyboardButton('🧩 Ryostar', url='https://t.me/ryostar')
+            InlineKeyboardButton('⚙️ Kênh', url='https://t.me/yeu69'),
+            InlineKeyboardButton('🧩 Nhóm', url='http://t.me/joinchat/BvHYpFNhr9o1M2Y9')
         ],
         [
-            InlineKeyboardButton('👨🏼‍🦯 Help', callback_data='help_main'),
-            InlineKeyboardButton('🗑 Close', callback_data='close'),
+            InlineKeyboardButton('👨🏼‍🦯 Công cụ', callback_data='help_main'),
+            InlineKeyboardButton('🗑 Đóng', callback_data='close'),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(buttons)
@@ -149,28 +149,28 @@ async def show_help(client, message):
         [
             [
                 InlineKeyboardButton("Play", callback_data='help_play'),
-                InlineKeyboardButton("Settings", callback_data=f"help_settings"),
-                InlineKeyboardButton("Recording", callback_data='help_record'),
+                InlineKeyboardButton("Cài đặt", callback_data=f"help_settings"),
+                InlineKeyboardButton("Ghi hình", callback_data='help_record'),
             ],
             [
-                InlineKeyboardButton("Scheduling", callback_data="help_schedule"),
-                InlineKeyboardButton("Controling", callback_data='help_control'),
+                InlineKeyboardButton("Lên lịch", callback_data="help_schedule"),
+                InlineKeyboardButton("Kiểm soát", callback_data='help_control'),
                 InlineKeyboardButton("Admins", callback_data="help_admin"),
             ],
             [
-                InlineKeyboardButton("Misc", callback_data='help_misc'),
+                InlineKeyboardButton("Linh tinh", callback_data='help_misc'),
                 InlineKeyboardButton("Config Vars", callback_data='help_env'),
-                InlineKeyboardButton("Close", callback_data="close"),
+                InlineKeyboardButton("Đóng", callback_data="close"),
             ],
         ]
         )
     if message.chat.type != "private" and message.from_user is None:
         k=await message.reply(
-            text="I cant help you here, since you are an anonymous admin. Get help in PM",
+            text="Tôi không thể giúp bạn ở đây, vì bạn là quản trị viên ẩn danh. Nhận trợ giúp trong PM",
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton(f"Help", url=f"https://telegram.dog/{Config.BOT_USERNAME}?start=help"),
+                        InlineKeyboardButton(f"Trợ giúp", url=f"https://telegram.dog/{Config.BOT_USERNAME}?start=help"),
                     ]
                 ]
             ),)
@@ -179,7 +179,7 @@ async def show_help(client, message):
     if Config.msg.get('help') is not None:
         await Config.msg['help'].delete()
     Config.msg['help'] = await message.reply_text(
-        "Learn to use the VCPlayer, Showing help menu, Choose from the below options.",
+        "Tìm hiểu cách sử dụng. Hiển thị menu trợ giúp, Chọn từ các tùy chọn bên dưới.",
         reply_markup=reply_markup,
         disable_web_page_preview=True
         )
@@ -188,21 +188,21 @@ async def show_help(client, message):
 async def repo_(client, message):
     buttons = [
         [
-            InlineKeyboardButton('🧩 Channel', url='https://t.me/banhbaothit'),
-            InlineKeyboardButton('⚙️ Update Channel', url='https://t.me/yeu69'),     
+            InlineKeyboardButton('🧩 Kênh', url='https://t.me/banhbaothit'),
+            InlineKeyboardButton('⚙️ Nhóm', url='https://t.me/yeu69'),     
         ],
         [
-            InlineKeyboardButton("Ryostar", url='https://t.me/ryostar'),
-            InlineKeyboardButton('🗑 Close', callback_data='close'),
+            InlineKeyboardButton("Box chát ❤", url='http://t.me/joinchat/BvHYpFNhr9o1M2Y9'),
+            InlineKeyboardButton('🗑 Đóng', callback_data='close'),
         ]
     ]
-    await message.reply("<b>ss.\nYou can deploy your own bot and use in your group.\n\nFeel free to star☀️ the repo if you liked it 🙃.</b>", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
+    await message.reply("<b>ss.\nBạn có thể triển khai bot của riêng mình và sử dụng trong nhóm của mình. 🙃.</b>", reply_markup=InlineKeyboardMarkup(buttons), disable_web_page_preview=True)
     await delete_messages([message])
 
 @Client.on_message(filters.command(['restart', 'update', f"restart@{Config.BOT_USERNAME}", f"update@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def update_handler(client, message):
     if Config.HEROKU_APP:
-        k = await message.reply("Heroku APP found, Restarting app to update.")
+        k = await message.reply("Đã tìm thấy ứng dụng, đang khởi động lại ứng dụng để cập nhật.")
         if Config.DATABASE_URI:
             msg = {"msg_id":k.message_id, "chat_id":k.chat.id}
             if not await db.is_saved("RESTART"):
@@ -211,7 +211,7 @@ async def update_handler(client, message):
                 await db.edit_config("RESTART", msg)
             await sync_to_db()
     else:
-        k = await message.reply("No Heroku APP found, Trying to restart.")
+        k = await message.reply("No APP found, Trying to restart.")
         if Config.DATABASE_URI:
             msg = {"msg_id":k.message_id, "chat_id":k.chat.id}
             if not await db.is_saved("RESTART"):
@@ -254,31 +254,31 @@ async def set_heroku_var(client, message):
                         "EDIT_TITLE", "RECORDING_DUMP", "RECORDING_TITLE", "IS_VIDEO", "IS_LOOP", "DELAY", "PORTRAIT", 
                         "IS_VIDEO_RECORD", "PTN", "CUSTOM_QUALITY"]
                 if env_ in ENV_VARS:
-                    await m.edit(f"Current Value for `{env}`  is `{getattr(Config, env_)}`")
+                    await m.edit(f"Giá trị hiện tại cho `{env}`  is `{getattr(Config, env_)}`")
                     await delete_messages([message])
                     return
                 else:
-                    await m.edit("This is an invalid env value. Read help on env to know about available env vars.")
+                    await m.edit("Đây là một giá trị env không hợp lệ. Đọc trợ giúp trên env để biết về các env có sẵn.")
                     await delete_messages([message, m])
                     return     
             
         else:
-            await m.edit("You haven't provided any value for env, you should follow the correct format.\nExample: <code>/env CHAT=-1020202020202</code> to change or set CHAT var.\n<code>/env REPLY_MESSAGE= <code>To delete REPLY_MESSAGE.")
+            await m.edit("Bạn chưa cung cấp bất kỳ giá trị nào cho env, bạn nên làm theo đúng định dạng.\nExample: <code>/env CHAT=-1020202020202</code> để thay đổi hoặc đặt CHAT var.\n<code>/env REPLY_MESSAGE= <code>To delete REPLY_MESSAGE.")
             await delete_messages([message, m])
             return
 
         if Config.DATABASE_URI and var in ["STARTUP_STREAM", "CHAT", "LOG_GROUP", "REPLY_MESSAGE", "DELAY", "RECORDING_DUMP", "QUALITY"]:      
-            await m.edit("Mongo DB Found, Setting up config vars...")
+            await m.edit("Mongo DB Found, thiết lập cấu hình vars...")
             await asyncio.sleep(2)  
             if not value:
-                await m.edit(f"No value for env specified. Trying to delete env {var}.")
+                await m.edit(f"Không có giá trị cho env được chỉ định. Đang cố gắng xóa env {var}.")
                 await asyncio.sleep(2)
                 if var in ["STARTUP_STREAM", "CHAT", "DELAY"]:
-                    await m.edit("This is a mandatory var and cannot be deleted.")
+                    await m.edit("Đây là var bắt buộc và không thể xóa.")
                     await delete_messages([message, m]) 
                     return
                 await edit_config(var, False)
-                await m.edit(f"Sucessfully deleted {var}")
+                await m.edit(f"Đã xóa thành công{var}")
                 await delete_messages([message, m])           
                 return
             else:
@@ -288,7 +288,7 @@ async def set_heroku_var(client, message):
                     except:
                         if var == "QUALITY":
                             if not value.lower() in ["low", "medium", "high"]:
-                                await m.edit("You should specify a value between 10 - 100.")
+                                await m.edit("Bạn nên chỉ định một giá trị từ 10 - 100.")
                                 await delete_messages([message, m])
                                 return
                             else:
@@ -300,7 +300,7 @@ async def set_heroku_var(client, message):
                                 elif value == "low":
                                     value = 50
                         else:
-                            await m.edit("You should give me a chat id . It should be an interger.")
+                            await m.edit("Bạn nên cho tôi một id trò chuyện. Nó phải là một interger.")
                             await delete_messages([message, m])
                             return
                     if var == "CHAT":
@@ -322,14 +322,14 @@ async def set_heroku_var(client, message):
                             k, reply = await seek_file(0)
                             if k == False:
                                 await restart_playout()
-                    await m.edit(f"Succesfully changed {var} to {value}")
+                    await m.edit(f"Đã thay đổi thành công {var} thành {value}")
                     await delete_messages([message, m])
                     return
                 else:
                     if var == "STARTUP_STREAM":
                         Config.STREAM_SETUP=False
                     await edit_config(var, value)
-                    await m.edit(f"Succesfully changed {var} to {value}")
+                    await m.edit(f"Đã thay đổi thành công {var} thành {value}")
                     await delete_messages([message, m])
                     await restart_playout()
                     return
@@ -337,7 +337,7 @@ async def set_heroku_var(client, message):
             if not Config.HEROKU_APP:
                 buttons = [[InlineKeyboardButton('Heroku API_KEY', url='https://dashboard.heroku.com/account/applications/authorizations/new'), InlineKeyboardButton('🗑 Close', callback_data='close'),]]
                 await m.edit(
-                    text="No heroku app found, this command needs the following heroku vars to be set.\n\n1. <code>HEROKU_API_KEY</code>: Your heroku account api key.\n2. <code>HEROKU_APP_NAME</code>: Your heroku app name.", 
+                    text="Không tìm thấy ứng dụng API nào, lệnh này cần thiết lập các vars heroku sau.\n\n1. <code>HEROKU_API_KEY</code>: Khóa api tài khoản heroku của bạn.\n2. <code>HEROKU_APP_NAME</code>: Tên ứng dụng heroku của bạn.", 
                     reply_markup=InlineKeyboardMarkup(buttons)) 
                 await delete_messages([message])
                 return     
@@ -346,13 +346,13 @@ async def set_heroku_var(client, message):
                 await m.edit(f"No value for env specified. Trying to delete env {var}.")
                 await asyncio.sleep(2)
                 if var in ["STARTUP_STREAM", "CHAT", "DELAY", "API_ID", "API_HASH", "BOT_TOKEN", "SESSION_STRING", "ADMINS"]:
-                    await m.edit("These are mandatory vars and cannot be deleted.")
+                    await m.edit("Đây là những vars bắt buộc và không thể xóa.")
                     await delete_messages([message, m])
                     return
                 if var in config:
-                    await m.edit(f"Sucessfully deleted {var}")
+                    await m.edit(f"Đã xóa thành công {var}")
                     await asyncio.sleep(2)
-                    await m.edit("Now restarting the app to make changes.")
+                    await m.edit("Bây giờ khởi động lại ứng dụng để thực hiện thay đổi.")
                     if Config.DATABASE_URI:
                         msg = {"msg_id":m.message_id, "chat_id":m.chat.id}
                         if not await db.is_saved("RESTART"):
@@ -362,15 +362,15 @@ async def set_heroku_var(client, message):
                     del config[var]                
                     config[var] = None               
                 else:
-                    k = await m.edit(f"No env named {var} found. Nothing was changed.")
+                    k = await m.edit(f"Không tìm thấy có env nào được đặt tên {var}. Không có gì được thay đổi.")
                     await delete_messages([message, k])
                 return
             if var in config:
-                await m.edit(f"Variable already found. Now edited to {value}")
+                await m.edit(f"Đã tìm thấy biến. Hiện đã được chỉnh sửa thành {value}")
             else:
-                await m.edit(f"Variable not found, Now setting as new var.")
+                await m.edit(f"Không tìm thấy biến, Hiện đang đặt làm var mới.")
             await asyncio.sleep(2)
-            await m.edit(f"Succesfully set {var} with value {value}, Now Restarting to take effect of changes...")
+            await m.edit(f"Đặt thành công {var} với giá trị {value}, Bây giờ Khởi động lại để thay đổi có hiệu lực...")
             if Config.DATABASE_URI:
                 msg = {"msg_id":m.message_id, "chat_id":m.chat.id}
                 if not await db.is_saved("RESTART"):
