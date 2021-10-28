@@ -63,7 +63,7 @@ Telegram bot to stream videos in telegram voicechat for both groups and channels
 ## Deploy to VPS
 
 ```sh
-git clone https://github.com/subinps/VCPlayerBot
+git clone https://github.com/Botnhacryo/VCPlayerBot
 cd VCPlayerBot
 pip3 install -r requirements.txt
 # <Create Variables appropriately (.env [optional])>
@@ -86,22 +86,3 @@ python3 main.py
 - Starts Radio after if no songs in playlist.
 - Automatic restart even if heroku restarts. (Configurable)
 - Support exporting and importing playlist.
-
-### Note
-
-[Note To A So Called Dev](https://telegram.dog/subin_works/203): 
-
-Kanging this codes and and editing a few lines and releasing a V.x  or an [alpha](https://telegram.dog/subin_works/204), beta , gama branches of your repo wont make you a Developer.
-Fork the repo and edit as per your needs.
-
-## LICENSE
-
-- [GNU General Public License](./LICENSE)
-
-
-## CREDITS
-
-- [Laky-64](https://github.com/Laky-64) for [py-tgcalls](https://github.com/pytgcalls/pytgcalls)
-- [Dan](https://github.com/delivrance) for [Pyrogram](https://github.com/pyrogram/pyrogram)
-
-
