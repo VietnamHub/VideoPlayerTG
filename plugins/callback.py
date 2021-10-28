@@ -77,7 +77,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                 return
             if you == "player":
                 if not Config.CALL_STATUS:
-                    return await query.answer("Not Playing anything.", show_alert=True)
+                    return await query.answer("Không chơi gì cả.", show_alert=True)
                 await query.message.edit_reply_markup(reply_markup=await get_buttons())
                 await query.answer()
                 return
@@ -248,7 +248,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
                         k.append(InlineKeyboardButton(text=f"{d}",callback_data=f"sch_minute_{year}_{month}_{day}_{hour}_{d}"))
                     button.append(k)
                 button.append([InlineKeyboardButton("Back", callback_data=f"sch_month_{year}_{month}_{day}"), InlineKeyboardButton("Close", callback_data="schclose")])
-                await query.message.edit(f"Choose minute of {hour}th hour on {day} {smonth} {year} to schedule Voicechat.", reply_markup=InlineKeyboardMarkup(button))
+                await query.message.edit(f"Chọn phút trong số {hour}th giờ trên {day} {smonth} {year} để lên lịch Voicechat.", reply_markup=InlineKeyboardMarkup(button))
 
             elif data.startswith("sch_minute"):
                 none, none, year, month, day, hour, minute = data.split("_")
@@ -404,10 +404,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
         elif query.data.lower() == "mute":
             if Config.MUTED:
                 await unmute()
-                await query.answer("Unmuted stream")
+                await query.answer("Luồng không bị tắt tiếng")
             else:
                 await mute()
-                await query.answer("Muted stream")
+                await query.answer("Luồng bị tắt tiếng")
             await sleep(1)
             await query.message.edit_reply_markup(reply_markup=await volume_buttons())
 
@@ -420,7 +420,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             data=Config.DATA.get('FILE_DATA')
             if not data.get('dur', 0) or \
                 data.get('dur') == 0:
-                return await query.answer("This is a live stream and cannot be seeked.", show_alert=True)
+                return await query.answer("Đây là một luồng trực tiếp và không thể tìm thấy được.", show_alert=True)
             k, reply = await seek_file(10)
             if k == False:
                 return await query.answer(reply, show_alert=True)
@@ -428,7 +428,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
         elif query.data.lower() == 'rewind':
             if not Config.CALL_STATUS:
-                return await query.answer("Not Playing anything.", show_alert=True)
+                return await query.answer("Không chơi gì cả.", show_alert=True)
             #if not (Config.playlist or Config.STREAM_LINK):
                 #return await query.answer("Startup stream cant be seeked.", show_alert=True)
             await query.answer("trying to rewind.")
@@ -445,9 +445,9 @@ async def cb_handler(client: Client, query: CallbackQuery):
         elif query.data == 'restart':
             if not Config.CALL_STATUS:
                 if not Config.playlist:
-                    await query.answer("Player is empty, starting STARTUP_STREAM.")
+                    await query.answer("Trình phát trống, bắt đầu STARTUP_STREAM.")
                 else:
-                    await query.answer('Resuming the playlist')
+                    await query.answer('Tiếp tục danh sách phát')
             await query.answer("Restrating the player")
             await restart()
             await query.message.edit(text=await get_playlist_str(), reply_markup=await get_buttons(), disable_web_page_preview=True)
