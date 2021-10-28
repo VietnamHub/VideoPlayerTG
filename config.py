@@ -208,7 +208,7 @@ Note: __For both the cases /fplay also can be used by admins to play the song im
 
 3. Play from a YouTube playlist
 Command: **/yplay**
-__First get a playlist file from @GetPlaylistBot or @DumpPlaylist and reply to playlist file.__
+__First get a playlist file from @yeu69 and reply to playlist file.__
 
 4. Live Stream
 Command: **/stream**
@@ -358,7 +358,7 @@ __If your player went something gone wrong, you can easily check the logs using 
  
 Command : **/env**
 __Setup your config vars with /env command.__
-__Example: To set up a__ `REPLY_MESSAGE` __use__ `/env REPLY_MESSAGE=Hey, Check out @subin_works rather than spamming in my PM`__
+__Example: To set up a__ `REPLY_MESSAGE` __use__ `/env REPLY_MESSAGE=Hey, Check out @yeu69 rather than spamming in my PM`__
 __You can delete a config var by ommiting a value for that, Example:__ `/env LOG_GROUP=` __this will delete the existing LOG_GROUP config.
 
 Command: **/config**
