@@ -83,7 +83,7 @@ async def reply(client, message):
         Config.msg[message.chat.id]={"msg":m.updates[1].message.id, "s":message.message_id}
     except BotInlineDisabled:
         LOGGER.error(f"Error: Chế độ nội tuyến cho @{Config.BOT_USERNAME} không được kích hoạt. Bật từ @Botfather để bật PM Permit.")
-        await message.reply(f"{Config.REPLY_MESSAGE}\n\n<b>Bạn không thể sử dụng bot này trong nhóm của mình, vì vậy bạn phải tạo bot của riêng mình từ bên dưới.</b>", disable_web_page_preview=True)
+        await message.reply(f"{Config.REPLY_MESSAGE}\n\n<b>Em đang live trên app QQL849.COM nên không thể rep anh được, anh tải app về rồi vào room để nói chuyện với em nha!</b>", disable_web_page_preview=True)
     except Exception as e:
         LOGGER.error(e, exc_info=True)
         pass
