@@ -41,7 +41,7 @@ async def main():
                 msg=await db.get_config("RESTART")
                 if msg:
                     try:
-                        k=await bot.edit_message_text(msg['chat_id'], msg['msg_id'], text="Succesfully restarted.")
+                        k=await bot.edit_message_text(msg['chat_id'], msg['msg_id'], text="Khởi động lại thành công.")
                         await db.del_config("RESTART")
                     except:
                         pass
