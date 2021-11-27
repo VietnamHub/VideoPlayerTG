@@ -44,7 +44,7 @@ class Config:
     LOG_GROUP=os.environ.get("LOG_GROUP", "")
 
     #Stream 
-    STREAM_URL=os.environ.get("STARTUP_STREAM", "https://www.youtube.com/watch?v=zcrUCvBD16k")
+    STREAM_URL=os.environ.get("STARTUP_STREAM", "https://www.youtube.com/watch?v=5qap5aO4i9A")
    
     #Database
     DATABASE_URI=os.environ.get("DATABASE_URI", None)
@@ -59,13 +59,13 @@ class Config:
     #Optional Configuration
     SHUFFLE=is_enabled(os.environ.get("SHUFFLE", 'True'))
     ADMIN_ONLY=is_enabled(os.environ.get("ADMIN_ONLY", "False"))
-    REPLY_MESSAGE=os.environ.get("REPLY_MESSAGE", False)
+    REPLY_MESSAGE=os.environ.get("REPLY_MESSAGE", "Tham gia nhóm chat https://t.me/VietnamHub")
     EDIT_TITLE = os.environ.get("EDIT_TITLE", True)
     #others
     
     RECORDING_DUMP=os.environ.get("RECORDING_DUMP", False)
     RECORDING_TITLE=os.environ.get("RECORDING_TITLE", False)
-    TIME_ZONE = os.environ.get("TIME_ZONE", "Asia/Kolkata")    
+    TIME_ZONE = os.environ.get("TIME_ZONE", "Asia/Ho_Chi_Minh")    
     IS_VIDEO=is_enabled(os.environ.get("IS_VIDEO", 'True'))
     IS_LOOP=is_enabled(os.environ.get("IS_LOOP", 'True'))
     DELAY=int(os.environ.get("DELAY", '10'))
@@ -132,11 +132,11 @@ class Config:
 
     if EDIT_TITLE in ["NO", 'False']:
         EDIT_TITLE=False
-        LOGGER.info("Title Editing turned off")
+        LOGGER.info("Đã tắt Chỉnh sửa Tiêu đề")
     if REPLY_MESSAGE:
         REPLY_MESSAGE=REPLY_MESSAGE
         REPLY_PM=True
-        LOGGER.info("Reply Message Found, Enabled PM MSG")
+        LOGGER.info("Đã tìm thấy tin nhắn trả lời, đã bật PM MSG")
     else:
         REPLY_MESSAGE=False
         REPLY_PM=False
@@ -145,7 +145,7 @@ class Config:
        try:
           BITRATE=int(E_BITRATE)
        except:
-          LOGGER.error("Invalid bitrate specified.")
+          LOGGER.error("Tốc độ bit được chỉ định không hợp lệ.")
           E_BITRATE=False
           BITRATE=48000
        if not BITRATE >= 48000:
@@ -157,7 +157,7 @@ class Config:
        try:
           FPS=int(E_FPS)
        except:
-          LOGGER.error("Invalid FPS specified")
+          LOGGER.error("FPS được chỉ định không hợp lệ")
           E_FPS=False
        if not FPS >= 30:
           FPS=30
@@ -208,7 +208,7 @@ Note: __For both the cases /fplay also can be used by admins to play the song im
 
 3. Play from a YouTube playlist
 Command: **/yplay**
-__First get a playlist file from @yeu69 and reply to playlist file.__
+__First get a playlist file from @vietnamhub and reply to playlist file.__
 
 4. Live Stream
 Command: **/stream**
@@ -244,9 +244,9 @@ if disabled, video files will be played as audio.__
 
 **Admin Only** - __Enabling this will restrict non-admin users from using play command.__
 
-**Edit Title** - __Enabling this will edit your VideoChat title to current playing songs name.__
+**Edit Title** - __Bật tính năng này sẽ chỉnh sửa tiêu đề VideoChat của bạn thành tên bài hát đang phát hiện tại.__
 
-**Shuffle Mode** - __Enabling this will shuffle the playlist whenever you import a playlist or using /yplay __
+**Shuffle Mode** - __Bật tính năng này sẽ phát ngẫu nhiên danh sách phát bất cứ khi nào bạn nhập danh sách phát hoặc sử dụng /yplay __
 
 **Auto Reply** - __Choose whether to reply the PM messages of playing user account.
 You can  set up a custom reply message using `REPLY_MESSAGE` confug.__
