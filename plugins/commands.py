@@ -129,8 +129,8 @@ async def start(client, message):
         return
     buttons = [
         [
-            InlineKeyboardButton('⚙️ Kênh', url='https://t.me/yeu69'),
-            InlineKeyboardButton('🧩 Nhóm', url='http://t.me/joinchat/BvHYpFNhr9o1M2Y9')
+            InlineKeyboardButton('⚙️ Nhóm', url='https://t.me/vietnamhub'),
+            InlineKeyboardButton('🧩 Kênh', url='https://t.me/joinchat/ug0cFfrfD3Q1MDll')
         ],
         [
             InlineKeyboardButton('👨🏼‍🦯 Công cụ', callback_data='help_main'),
@@ -188,8 +188,8 @@ async def show_help(client, message):
 async def repo_(client, message):
     buttons = [
         [
-            InlineKeyboardButton('🧩 Kênh', url='https://t.me/banhbaothit'),
-            InlineKeyboardButton('⚙️ Nhóm', url='https://t.me/yeu69'),     
+            InlineKeyboardButton('🧩 Kênh', url='https://t.me/vietnamhub'),
+            InlineKeyboardButton('⚙️ Nhóm', url='https://t.me/joinchat/ug0cFfrfD3Q1MDll'),     
         ],
         [
             InlineKeyboardButton("Box chát ❤", url='http://t.me/joinchat/BvHYpFNhr9o1M2Y9'),
@@ -211,7 +211,7 @@ async def update_handler(client, message):
                 await db.edit_config("RESTART", msg)
             await sync_to_db()
     else:
-        k = await message.reply("No APP found, Trying to restart.")
+        k = await message.reply("Không tìm thấy APP, đang cố gắng khởi động lại.")
         if Config.DATABASE_URI:
             msg = {"msg_id":k.message_id, "chat_id":k.chat.id}
             if not await db.is_saved("RESTART"):
@@ -232,13 +232,13 @@ async def get_logs(client, message):
         await m.delete()
         await delete_messages([message])
     else:
-        k = await m.edit("No log files found.")
+        k = await m.edit("Không tìm thấy tệp nhật ký.")
         await delete_messages([message, k])
 
 @Client.on_message(filters.command(['env', f"env@{Config.BOT_USERNAME}", "config", f"config@{Config.BOT_USERNAME}"]) & sudo_filter & chat_filter)
 async def set_heroku_var(client, message):
     with suppress(MessageIdInvalid, MessageNotModified):
-        m = await message.reply("Checking config vars..")
+        m = await message.reply("Kiểm tra các vars cấu hình..")
         if " " in message.text:
             cmd, env = message.text.split(" ", 1)
             if "=" in env:
