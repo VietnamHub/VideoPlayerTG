@@ -31,8 +31,8 @@ from pyrogram import (
 
 buttons = [
     [
-        InlineKeyboardButton('⚡️ Nhóm', url='https://t.me/yeu69'),
-        InlineKeyboardButton('🧩 Join Here', url='https://t.me/joinchat/BvHYpFNhr9o1M2Y9'),
+        InlineKeyboardButton('⚡️ Nhóm', url='https://t.me/vietnamhub'),
+        InlineKeyboardButton('🧩 Kênh', url='https://t.me/joinchat/ug0cFfrfD3Q1MDll'),
     ]
     ]
 def get_cmd(dur):
@@ -87,7 +87,7 @@ async def search(client, query):
             await query.answer(
                 results=answers,
                 cache_time=0,
-                switch_pm_text=("Nothing found"),
+                switch_pm_text=("Không kết quả"),
                 switch_pm_parameter="",
             )
 
