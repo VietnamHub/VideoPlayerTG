@@ -60,7 +60,7 @@ class Config:
     SHUFFLE=is_enabled(os.environ.get("SHUFFLE", 'True'))
     ADMIN_ONLY=is_enabled(os.environ.get("ADMIN_ONLY", "False"))
     REPLY_MESSAGE=os.environ.get("REPLY_MESSAGE", "Tham gia nhóm chat https://t.me/VietnamHub")
-    EDIT_TITLE = os.environ.get("EDIT_TITLE", True)
+    EDIT_TITLE = os.environ.get("EDIT_TITLE", False)
     #others
     
     RECORDING_DUMP=os.environ.get("RECORDING_DUMP", False)
