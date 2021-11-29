@@ -324,7 +324,7 @@ async def seek_playout(client, m: Message):
         await delete_messages([m, k])
 
 
-@Client.on_message(filters.command(["settings", f"settings@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
+@Client.on_message(filters.command(["caidat", f"caidat@{Config.BOT_USERNAME}"]) & admin_filter & chat_filter)
 async def settings(client, m: Message):
     await m.reply(f"Định cấu hình cài đặt VCPlayer của bạn tại đây.ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ", reply_markup=await settings_panel(), disable_web_page_preview=True)
     await delete_messages([m])
