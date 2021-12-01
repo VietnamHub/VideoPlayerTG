@@ -167,9 +167,9 @@ class Config:
        CUSTOM_QUALITY=int(CUSTOM_QUALITY)
        if CUSTOM_QUALITY > 100:
           CUSTOM_QUALITY = 100
-          LOGGER.warning("maximum quality allowed is 100, invalid quality specified. Quality set to 100")
+          LOGGER.warning("chất lượng tối đa cho phép là 100, chất lượng đã chỉ định không hợp lệ. Chất lượng được đặt thành 100")
        elif CUSTOM_QUALITY < 10:
-          LOGGER.warning("Minimum Quality allowed is 10., Qulaity set to 10")
+          LOGGER.warning("Chất lượng tối thiểu được phép là 10, Qulaity được đặt thành 10")
           CUSTOM_QUALITY = 10
        if  66.9  < CUSTOM_QUALITY < 100:
           if not E_BITRATE:
@@ -188,193 +188,193 @@ class Config:
        elif CUSTOM_QUALITY.lower() == 'low':
           CUSTOM_QUALITY=50
        else:
-          LOGGER.warning("Invalid QUALITY specified.Defaulting to High.")
+          LOGGER.warning("Đã chỉ định CHẤT LƯỢNG không hợp lệ. Dẫn đến Cao.")
           CUSTOM_QUALITY=100
 
 
 
     #help strings 
     PLAY_HELP="""
-__You can play using any of these options__
+__Bạn có thể chơi bằng bất kỳ tùy chọn nào trong số này__
 
-1. Play a video from a YouTube link.
-Command: **/play**
-__You can use this as a reply to a YouTube link or pass link along command. or as a reply to message to search that in YouTube.__
+1. Phát video từ liên kết YouTube.
+Command: **/live**
+__Bạn có thể sử dụng điều này như một câu trả lời cho một liên kết YouTube hoặc chuyển liên kết theo lệnh. hoặc dưới dạng trả lời tin nhắn để tìm kiếm tin nhắn đó trong YouTube.__
 
-2. Play from a telegram file.
-Command: **/play**
-__Reply to a supported media(video and documents or audio file ).__
-Note: __For both the cases /fplay also can be used by admins to play the song immediately without waiting for queue to end.__
+2. Phát từ một tệp điện tín.
+Command: **/live**
+__Trả lời phương tiện được hỗ trợ (video và tài liệu hoặc tệp âm thanh).__
+Lưu ý: __Đối với cả hai trường hợp /fplay cũng có thể được quản trị viên sử dụng để phát bài hát ngay lập tức mà không cần đợi kết thúc hàng đợi.__
 
 3. Play from a YouTube playlist
 Command: **/yplay**
-__First get a playlist file from @vietnamhub and reply to playlist file.__
+__Đầu tiên, lấy một tệp danh sách phát từ @vietnamhub và trả lời tệp danh sách phát.__
 
 4. Live Stream
 Command: **/stream**
-__Pass a live stream URL or any direct URL to play it as stream.__
+__Chuyển URL luồng trực tiếp hoặc bất kỳ URL trực tiếp nào để phát dưới dạng luồng.__
 
 5. Import an old playlist.
 Command: **/import**
-__Reply to a previously exported playlist file. __
+__Trả lời tệp danh sách phát đã xuất trước đó.__
 
 6. Channel Play
 Command: **/cplay**
-__Use `/cplay channel username or channel id` to play all the files from the given channel.
-By default both video files and documents will be played . You can add or remove the file type using `FILTERS` var. 
-For example , to stream audio, video and document from the channel use `/env FILTERS video document audio` . If you need only audio , you can use `/env FILTERS video audio` and so on.
-To set up the files from a channel as STARTUP_STREAM, so that the files will be automatically added to playlist on startup of bot. use `/env STARTUP_STREAM channel username or channel id`
+__Use `/cplay tên người dùng kênh hoặc id kênh` để phát tất cả các tệp từ kênh nhất định.
+Theo mặc định, cả tệp video và tài liệu sẽ được phát. Bạn có thể thêm hoặc xóa loại tệp bằng cách sử dụng `FILTERS` var. 
+Ví dụ: để phát trực tuyến âm thanh, video và tài liệu từ kênh sử dụng `/env FILTERS video document audio` . Nếu bạn chỉ cần âm thanh, bạn có thể sử dụng`/env FILTERS video audio` và như thế.
+Để thiết lập các tệp từ một kênh dưới dạng STARTUP_STREAM, để các tệp sẽ được tự động thêm vào danh sách phát khi khởi động bot. sử dụng `/env STARTUP_STREAM tên người dùng kênh hoặc id kênh`
 
-Note that for public channels you should use username of channels along with '@' and for private channels you should use channel id.
-For private channels , make sure both the bot and USER account is a member of channel.__
+Lưu ý rằng đối với các kênh công khai, bạn nên sử dụng tên người dùng của các kênh cùng với '@' và đối với các kênh riêng tư, bạn nên sử dụng id kênh.
+Đối với các kênh riêng tư, hãy đảm bảo cả tài khoản bot và USER đều là thành viên của kênh.__
 """
     SETTINGS_HELP="""
-**You can easily customize you player as per you needs. The following configurations are available:**
+**Bạn có thể dễ dàng tùy chỉnh trình phát của mình theo nhu cầu của bạn. Các cấu hình sau có sẵn:**
 
 🔹Command: **/settings**
 
-🔹AVAILABLE CONFIGURATIONS:
+🔹CÁC CẤU HÌNH CÓ SN:
 
-**Player Mode** -  __This allows you to run your player as 24/7 music player or only when there is song in queue. 
-If disabled, player will leave from the call when the playlist is empty.
-Otherwise STARTUP_STREAM will be streamed when playlist id empty.__
+**Player Mode** -  __Điều này cho phép bạn chạy trình phát của mình dưới dạng trình phát nhạc 24/7 hoặc chỉ khi có bài hát trong hàng đợi. 
+Nếu bị tắt, trình phát sẽ rời khỏi cuộc gọi khi danh sách phát trống.
+Nếu không thì STARTUP_STREAM sẽ được phát trực tuyến khi id danh sách phát trống.__
 
-**Video Enabled** -  __This allows you to switch between audio and video.
-if disabled, video files will be played as audio.__
+**Video Enabled** -  __Điều này cho phép bạn chuyển đổi giữa âm thanh và video.
+nếu bị vô hiệu hóa, các tệp video sẽ được phát dưới dạng âm thanh.__
 
-**Admin Only** - __Enabling this will restrict non-admin users from using play command.__
+**Admin Only** - __Bật điều này sẽ hạn chế người dùng không phải quản trị viên sử dụng lệnh chơi.__
 
 **Edit Title** - __Bật tính năng này sẽ chỉnh sửa tiêu đề VideoChat của bạn thành tên bài hát đang phát hiện tại.__
 
 **Shuffle Mode** - __Bật tính năng này sẽ phát ngẫu nhiên danh sách phát bất cứ khi nào bạn nhập danh sách phát hoặc sử dụng /yplay __
 
-**Auto Reply** - __Choose whether to reply the PM messages of playing user account.
-You can  set up a custom reply message using `REPLY_MESSAGE` confug.__
+**Auto Reply** - __Chọn có trả lời tin nhắn PM của tài khoản người dùng đang chơi hay không.
+Bạn có thể thiết lập một tin nhắn trả lời tùy chỉnh bằng cách sử dụng confug `REPLY_MESSAGE`.__
 
 """
     SCHEDULER_HELP="""
-__VCPlayer allows you to schedule a stream. 
-This means you can schedule a stream for a future date and on the scheduled date, stream will be played automatically.
-At present you can schedule a stream for even one year!!. Make sure you have set up a databse, else you will loose your schedules whenever the player restarts. __
+__VCPlayer cho phép bạn lên lịch một luồng.
+Điều này có nghĩa là bạn có thể lên lịch phát trực tiếp vào một ngày trong tương lai và vào ngày đã lên lịch, luồng sẽ được phát tự động.
+Hiện tại, bạn có thể lên lịch phát trực tiếp trong một năm !!. Đảm bảo rằng bạn đã thiết lập một cơ sở dữ liệu, nếu không, bạn sẽ mất lịch trình của mình bất cứ khi nào trình phát khởi động lại. __
 
 Command: **/schedule**
 
-__Reply to a file or a youtube video or even a text message with schedule command.
-The replied media or youtube video will be scheduled and will be played on the scheduled date.
-The scheduling time is by default in IST and you can change the timezone using `TIME_ZONE` config.__
+__Trả lời một tệp hoặc một video youtube hoặc thậm chí một tin nhắn văn bản với lệnh lịch trình.
+Phương tiện truyền thông hoặc video youtube đã trả lời sẽ được lên lịch và sẽ phát vào ngày đã định.
+Thời gian lập lịch theo mặc định trong IST và bạn có thể thay đổi múi giờ bằng cách sử dụng cấu hình `TIME_ZONE`.__
 
 Command: **/slist**
-__View your current scheduled streams.__
+__Xem các luồng đã lên lịch hiện tại của bạn.__
 
 Command: **/cancel**
-__Cancel a schedule by its schedule id, You can get the schedule id using /slist command__
+__Hủy lịch trình bằng id lịch biểu của nó, Bạn có thể lấy id lịch trình bằng lệnh /slist__
 
 Command: **/cancelall**
-__Cancel all the scheduled streams__
+__Hủy tất cả các luồng đã lên lịch__
 """
     RECORDER_HELP="""
-__With VCPlayer you can easily record all your video chats.
-By default telegram allows you to record for a maximum duration of 4 hours. 
-An attempt to overcome this limit has been made by automatically restarting the recording after  4 hours__
+__Với VCPlayer, bạn có thể dễ dàng ghi lại tất cả các cuộc trò chuyện video của mình.
+Theo mặc định, điện tín cho phép bạn ghi trong thời gian tối đa là 4 giờ.
+Một nỗ lực để vượt qua giới hạn này đã được thực hiện bằng cách tự động khởi động lại quá trình ghi sau 4 giờ__
 
 Command: **/record**
 
-AVAILABLE CONFIGURATIONS:
-1. Record Video: __If enabled both the video and audio of the stream will be recorded, otherwise only audio will be recorded.__
+CÁC CẤU HÌNH CÓ SN:
+1. Record Video: __Nếu được bật, cả video và âm thanh của luồng sẽ được ghi lại, nếu không, chỉ âm thanh sẽ được ghi.__
 
-2. Video dimension: __Choose between portrait and landscape dimensions for your recording__
+2. Video dimension: __Chọn giữa kích thước dọc và ngang để ghi âm của bạn__
 
-3. Custom Recording Title: __Set up a custom recording title for your recordings. Use a command /rtitle to configure this.
-To turn off the custom title, use `/rtitle False `__
+3. Custom Recording Title: __Thiết lập tiêu đề bản ghi tùy chỉnh cho bản ghi của bạn. Sử dụng một lệnh /rtitle để cấu hình cái này.
+Để tắt tiêu đề tùy chỉnh, hãy sử dụng `/rtitle False `__
 
-4. Recording Dumb: __You can set up forwarding all your recordings to a channel, this will be useful since otherwise recordings are sent to saved messages of streaming account.
-Setup using `RECORDING_DUMP` config.__
+4. Recording Dumb: __Bạn có thể thiết lập chuyển tiếp tất cả các bản ghi của mình tới một kênh, điều này sẽ hữu ích vì nếu không, các bản ghi sẽ được gửi đến tin nhắn đã lưu của tài khoản phát trực tuyến.
+Thiết lập bằng cách sử dụng cấu hình`RECORDING_DUMP` .__
 
-⚠️ If you start a recording with vcplayer, make sure you stop the same with vcplayer.
+⚠️ Nếu bạn bắt đầu ghi bằng vcplayer, hãy đảm bảo rằng bạn cũng dừng lại với vcplayer.
 
 """
 
     CONTROL_HELP="""
-__VCPlayer allows you to control your streams easily__
-1. Skip a song.
+__VCPlayer cho phép bạn kiểm soát các luồng của mình một cách dễ dàng__
+1. Bỏ qua một bài hát.
 Command: **/skip**
-__You can pass a number greater than 2 to skip the song in that position.__
+__Bạn có thể vượt qua một số lớn hơn 2 để bỏ qua bài hát ở vị trí đó.__
 
-2. Pause the player.
+2. Tạm dừng trình phát.
 Command: **/pause**
 
-3. Resume the player.
+3. Tiếp tục trình phát.
 Command: **/resume**
 
-4. Change Volume.
+4. Thây đổi độ lơn âm thanh.
 Command: **/volume**
 __Pass the volume in between 1-200.__
 
-5. Leave the VC.
+5. Bỏ VC.
 Command: **/leave**
 
-6. Shuffle the playlist.
+6. Phát ngẫu nhiên danh sách phát.
 Command: **/shuffle**
 
-7. Clear the current playlist queue.
+7. Xóa hàng đợi danh sách phát hiện tại.
 Command: **/clearplaylist**
 
-8. Seek the video.
+8. Tìm kiếm video.
 Command: **/seek**
-__You can pass number of seconds to be skipped. Example: /seek 10 to skip 10 sec. /seek -10 to rewind 10 sec.__
+__Bạn có thể vượt qua số giây được bỏ qua. Ví dụ: /seek 10 để bỏ qua 10 giây. /seek -10 để tua lại 10 giây.__
 
-9. Mute the player.
+9. Tắt tiếng trình phát.
 Command: **/vcmute**
 
-10. Unmute the player.
+10. Bật tiếng trình phát.
 Command : **/vcunmute**
 
-11. Shows the playlist.
+11. Hiển thị danh sách phát.
 Command: **/playlist** 
-__Use /player to show with control buttons__
+__Sử dụng /player hiển thị bằng các nút điều khiển__
 """
 
     ADMIN_HELP="""
-__VCPlayer allows to control admins, that is you can add admins and remove them easily.
-It is recommended to use a MongoDb database for better experience, else all you admins will get reset after restart.__
+__VCPlayer cho phép kiểm soát quản trị viên, tức là bạn có thể thêm quản trị viên và loại bỏ họ một cách dễ dàng.
+Bạn nên sử dụng cơ sở dữ liệu MongoDb để có trải nghiệm tốt hơn, nếu không, tất cả những gì bạn quản trị viên sẽ được đặt lại sau khi khởi động lại.__
 
 Command: **/vcpromote**
-__You can promote a admin with their username or user id or by replying to that users message.__
+__Bạn có thể thăng cấp quản trị viên bằng tên người dùng hoặc id người dùng của họ hoặc bằng cách trả lời tin nhắn của người dùng đó.__
 
 Command: **/vcdemote**
-__Remove an admin from admin list__
+__Xóa quản trị viên khỏi danh sách quản trị viên__
 
 Command: **/refresh**
-__Refresh the admin list of chat__
+__Làm mới danh sách quản trị viên trò chuyện__
 """
 
     MISC_HELP="""
 Command: **/export**
-__VCPlayer allows you to export your current playlist for future use.__
-__A json file will be sent to you and the same can be used along /import command.__
+__VCPlayer cho phép bạn xuất danh sách phát hiện tại của mình để sử dụng trong tương lai.__
+__Một tệp json sẽ được gửi cho bạn và tệp này có thể được sử dụng cùng /import command.__
 
 Command : **/logs**
-__If your player went something gone wrong, you can easily check the logs using /logs__
+__Nếu trình phát của bạn gặp sự cố, bạn có thể dễ dàng kiểm tra nhật ký bằng cách sử dụng /logs__
  
 Command : **/env**
-__Setup your config vars with /env command.__
-__Example: To set up a__ `REPLY_MESSAGE` __use__ `/env REPLY_MESSAGE=Hey, Check out @yeu69 rather than spamming in my PM`__
-__You can delete a config var by ommiting a value for that, Example:__ `/env LOG_GROUP=` __this will delete the existing LOG_GROUP config.
+__Thiết lập vars cấu hình của bạn bằng lệnh /env.__
+__Example: To set up a__ `REPLY_MESSAGE` __use__ `/env REPLY_MESSAGE=Hey, Kiểm tra @ yeu69 thay vì gửi thư rác trong PM của tôi`__
+__You can delete a config var by ommiting a value for that, Example:__ `/env LOG_GROUP=` __điều này sẽ xóa hiện tại LOG_GROUP config.
 
 Command: **/config**
-__Same as using /env**
+__Giống như cách sử dụng /env**
 
 Command: **/update**
-__Updates youe bot with latest changes__
+__Cập nhật bot của bạn với những thay đổi mới nhất__
 
-Tip: __You can easily change the CHAT config by adding the user account and bot account to any other group and any command in new group__
+Tip: __Bạn có thể dễ dàng thay đổi cấu hình CHAT bằng cách thêm tài khoản người dùng và tài khoản bot vào bất kỳ nhóm nào khác và bất kỳ lệnh nào trong nhóm mới__
 
 """
     ENV_HELP="""
-**These are the configurable vars available and you can set each one of them using /env command**
+**Đây là những vars có thể định cấu hình có sẵn và bạn có thể đặt từng vars bằng cách sử dụng kênh /env**
 
 
-**Mandatory Vars**
+**Vars bắt buộc**
 
 1. `API_ID` : __Get From [my.telegram.org](https://my.telegram.org/)__
 
@@ -382,62 +382,62 @@ Tip: __You can easily change the CHAT config by adding the user account and bot 
 
 3. `BOT_TOKEN` : __[@Botfather](https://telegram.dog/BotFather)__
 
-4. `SESSION_STRING` : __Generate From here [GenerateStringName](https://t.me/yeu69)__
+4. `SESSION_STRING` : __Tạo từ đây [GenerateStringName](https://t.me/phiendangnhap_bot)__
 
-5. `CHAT` : __ID of Channel/Group where the bot plays Music.__
+5. `CHAT` : __ID của Kênh / Nhóm nơi bot phát Nhạc.__
 
-6. `STARTUP_STREAM` : __This will be streamed on startups and restarts of bot. 
-You can use either any STREAM_URL or a direct link of any video or a Youtube Live link. 
-You can also use YouTube Playlist.Find a Telegram Link for your playlist from [PlayList Dumb](https://t.me/yeu69) or get a PlayList from [PlayList Extract](https://t.me/yeu69). 
-The PlayList link should in form `https://t.me/DumpPlaylist/xxx`
-You can also use the files from a channel as startup stream. For that just use the channel id or channel username of channel as STARTUP_STREAM value.
-For more info on channel play , read help from player section.__
+6. `STARTUP_STREAM` : __Điều này sẽ được phát trực tiếp khi khởi động và khởi động lại bot. 
+Bạn có thể sử dụng bất kỳ STREAM_URL nào hoặc liên kết trực tiếp của bất kỳ video nào hoặc liên kết Trực tiếp trên Youtube.
+Bạn cũng có thể sử dụng Danh sách phát trên YouTube. Tìm Liên kết Telegram cho danh sách phát của bạn từ [PlayList Dumb](https://t.me/vietnamhub) hoặc nhận PlayList từ [PlayList Extract](https://t.me/yeu69). 
+Liên kết PlayList phải ở dạng `https://t.me/owogram/xxx`
+Bạn cũng có thể sử dụng các tệp từ một kênh làm luồng khởi động. Đối với điều đó, chỉ cần sử dụng id kênh hoặc tên người dùng kênh của kênh làm giá trị STARTUP_STREAM.
+Để biết thêm thông tin về phát kênh, hãy đọc trợ giúp từ phần trình phát.__
 
-**Recommended Optional Vars**
+**Vars tùy chọn được đề xuất**
 
-1. `DATABASE_URI`: __MongoDB database Url, get from [mongodb](https://cloud.mongodb.com). This is an optional var, but it is recomonded to use this to experiance the full features.__
+1. `DATABASE_URI`: __Url cơ sở dữ liệu MongoDB, lấy từ [mongodb](https://cloud.mongodb.com). This is an optional var, but it is recomonded to use this to experiance the full features.__
 
-2. `HEROKU_API_KEY`: __Your heroku api key. Get one from [here](https://dashboard.heroku.com/account/applications/authorizations/new)__
+2. `HEROKU_API_KEY`: __Phím api heroku của bạn. Nhận một từ [tại đây](https://dashboard.heroku.com/account/applications/authorizations/new)__
 
-3. `HEROKU_APP_NAME`: __Your heroku app's name.__
+3. `HEROKU_APP_NAME`: __Tên ứng dụng heroku của bạn.__
 
-4. `FILTERS`: __Filters for channel play file search. Read help about cplay in player section.__
+4. `FILTERS`: __Bộ lọc để tìm kiếm tệp phát kênh. Đọc trợ giúp về cplay trong phần trình phát.__
 
-**Other Optional Vars**
-1. `LOG_GROUP` : __Group to send Playlist, if CHAT is a Group__
+**Các Vars tùy chọn khác**
+1. `LOG_GROUP` : __Nhóm để gửi Danh sách phát, nếu CHAT là một Nhóm__
 
-2. `ADMINS` : __ID of users who can use admin commands.__
+2. `ADMINS` : __ID của người dùng có thể sử dụng lệnh quản trị.__
 
-3. `REPLY_MESSAGE` : __A reply to those who message the USER account in PM. Leave it blank if you do not need this feature. (Configurable through buttons if mongodb added. Use /settings)__
+3. `REPLY_MESSAGE` : __Một câu trả lời cho những người nhắn tin cho tài khoản USER trong PM. Để trống nếu bạn không cần tính năng này. (Có thể cấu hình thông qua các nút nếu mongodb được thêm vào. Sử dụng /caidat)__
 
-4. `ADMIN_ONLY` : __Pass `True` If you want to make /play command only for admins of `CHAT`. By default /play is available for all.(Configurable through buttons if mongodb added. Use /settings)__
+4. `ADMIN_ONLY` : __Vượt qua `True` nếu bạn muốn thực hiện /live lệnh chỉ dành cho quản trị viên của `CHAT`. Theo mặc định /live có sẵn cho tất cả. (Có thể cấu hình thông qua các nút nếu mongodb được thêm vào. Sử dụng /caidat)__
 
-5. `DATABASE_NAME`: __Database name for your mongodb database.mongodb__
+5. `DATABASE_NAME`: __Tên cơ sở dữ liệu cho cơ sở dữ liệu mongodb của bạn.mongodb__
 
-6. `SHUFFLE` : __Make it `False` if you dont want to shuffle playlists. (Configurable through buttons)__
+6. `SHUFFLE` : __Làm cho nó `False` nếu bạn không muốn xáo trộn danh sách phát. (Có thể cấu hình thông qua các nút)__
 
-7. `EDIT_TITLE` : __Make it `False` if you do not want the bot to edit video chat title according to playing song. (Configurable through buttons if mongodb added. Use /settings)__
+7. `EDIT_TITLE` : __Đặt nó thành `False` nếu bạn không muốn bot chỉnh sửa tiêu đề trò chuyện video theo bài hát đang phát.(Có thể cấu hình thông qua các nút nếu mongodb được thêm vào. Sử dụng /settings)__
 
-8. `RECORDING_DUMP` : __A Channel ID with the USER account as admin, to dump video chat recordings.__
+8. `RECORDING_DUMP` : __ID kênh với tài khoản USER làm quản trị viên, để kết xuất các bản ghi trò chuyện video.__
 
-9. `RECORDING_TITLE`: __A custom title for your videochat recordings.__
+9. `RECORDING_TITLE`: __Tiêu đề tùy chỉnh cho bản ghi video trò chuyện của bạn.__
 
-10. `TIME_ZONE` : __Time Zone of your country, by default IST__
+10. `TIME_ZONE` : __Múi giờ của quốc gia bạn, theo mặc định là IST__
 
-11. `IS_VIDEO_RECORD` : __Make it `False` if you do not want to record video, and only audio will be recorded.(Configurable through buttons if mongodb added. Use /record)__
+11. `IS_VIDEO_RECORD` : __Đặt nó thành `False` nếu bạn không muốn quay video và chỉ âm thanh sẽ được ghi. (Có thể định cấu hình thông qua các nút nếu mongodb được thêm vào. Sử dụng / ghi lại)__
 
-12. `IS_LOOP` ; __Make it `False` if you do not want 24 / 7 Video Chat. (Configurable through buttons if mongodb added.Use /settings)__
+12. `IS_LOOP` ; __Make it `False` if you do not want 24 / 7 Video Chat. (Configurable through buttons if mongodb added.Use /caidat)__
 
-13. `IS_VIDEO` : __Make it `False` if you want to use the player as a musicplayer without video. (Configurable through buttons if mongodb added. Use /settings)__
+13. `IS_VIDEO` : __Hãy biến nó thành `False` nếu bạn muốn sử dụng trình phát làm trình phát nhạc mà không có video. (Có thể cấu hình thông qua các nút nếu mongodb được thêm vào. Sử dụng/caidat)__
 
-14. `PORTRAIT`: __Make it `True` if you want the video recording in portrait mode. (Configurable through buttons if mongodb added. Use /record)__
+14. `PORTRAIT`: __Đặt nó thành True nếu bạn muốn quay video ở chế độ dọc. (Có thể cấu hình thông qua các nút nếu mongodb được thêm vào. Sử dụng /record)__
 
-15. `DELAY` : __Choose the time limit for commands deletion. 10 sec by default.__
+15. `DELAY` : __Chọn giới hạn thời gian cho việc xóa lệnh. 10 giây theo mặc định.__
 
-16. `QUALITY` : __Customize the quality of video chat, use one of `high`, `medium`, `low` . __
+16. `QUALITY` : __Tùy chỉnh chất lượng của trò chuyện video, sử dụng một trong các `high`, `medium`, `low` . __
 
-17. `BITRATE` : __Bitrate of audio (Not recommended to change).__
+17. `BITRATE` : __Tốc độ bit của âm thanh (Không nên thay đổi).__
 
-18. `FPS` : __Fps of video to be played (Not recommended to change.)__
+18. `FPS` : __Fps của video sẽ phát (Không nên thay đổi.)__
 
 """
