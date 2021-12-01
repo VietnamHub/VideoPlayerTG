@@ -108,7 +108,7 @@ async def play():
         if not file:
             file = await dl.pyro_dl(song[2])
             if not file:
-                LOGGER.info("Downloading file from telegram")
+                LOGGER.info("Tải xuống tệp từ telegram")
                 file = await bot.download_media(song[2])
             Config.GET_FILE[song[5]] = file
             await sleep(3)
@@ -117,7 +117,7 @@ async def play():
             await sleep(1)
         total=int(((song[5].split("_"))[1])) * 0.005
         while not (os.stat(file).st_size) >= total:
-            LOGGER.info("Waiting for download")
+            LOGGER.info("Đang chờ tải xuống")
             LOGGER.info(str((os.stat(file).st_size)))
             await sleep(1)
     elif song[3] == "url":
@@ -128,24 +128,24 @@ async def play():
         if Config.playlist or Config.STREAM_LINK:
             return await skip()     
         else:
-            LOGGER.error("This stream is not supported , leaving VC.")
+            LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
             await leave_call()
             return False 
     link, seek, pic, width, height = await chek_the_media(file, title=f"{song[1]}")
     if not link:
-        LOGGER.warning("Unsupported link, Skiping from queue.")
+        LOGGER.warning("Liên kết không được hỗ trợ, Đang bỏ qua khỏi hàng đợi.")
         return
     await sleep(1)
     if Config.STREAM_LINK:
         Config.STREAM_LINK=False
-    LOGGER.info(f"STARTING PLAYING: {song[1]}")
+    LOGGER.info(f"BẮT ĐẦU CHƠI: {song[1]}")
     await join_call(link, seek, pic, width, height)
 
 async def schedule_a_play(job_id, date):
     try:
         scheduler.add_job(run_schedule, "date", [job_id], id=job_id, run_date=date, max_instances=50, misfire_grace_time=None)
     except ConflictingIdError:
-        LOGGER.warning("This already scheduled")
+        LOGGER.warning("Điều này đã được lên lịch")
         return
     if not Config.CALL_STATUS or not Config.IS_ACTIVE:
         if Config.SCHEDULE_LIST[0]['job_id'] == job_id \
@@ -163,15 +163,15 @@ async def schedule_a_play(job_id, date):
                 )
                 Config.HAS_SCHEDULE=True
             except ScheduleDateInvalid:
-                LOGGER.error("Unable to schedule VideoChat, since date is invalid")
+                LOGGER.error("Không thể lên lịch VideoChat, vì ngày không hợp lệ")
             except Exception as e:
-                LOGGER.error(f"Error in scheduling voicechat- {e}", exc_info=True)
+                LOGGER.error(f"Lỗi khi lập lịch trò chuyện thoại- {e}", exc_info=True)
     await sync_to_db()
 
 async def run_schedule(job_id):
     data=Config.SCHEDULED_STREAM.get(job_id)
     if not data:
-        LOGGER.error("The Scheduled stream was not played, since data is missing")
+        LOGGER.error("Luồng đã lên lịch không được phát vì thiếu dữ liệu")
         old=filter(lambda k: k['job_id'] == job_id, Config.SCHEDULE_LIST)
         if old:
             Config.SCHEDULE_LIST.remove(old)
@@ -180,12 +180,12 @@ async def run_schedule(job_id):
     else:
         if Config.HAS_SCHEDULE:
             if not await start_scheduled():
-                LOGGER.error("Scheduled stream skipped, Reason - Unable to start a voice chat.")
+                LOGGER.error("Luồng đã lên lịch bị bỏ qua, Lý do - Không thể bắt đầu trò chuyện thoại.")
                 return
         data_ = [{1:data['1'], 2:data['2'], 3:data['3'], 4:data['4'], 5:data['5']}]
         Config.playlist = data_ + Config.playlist
         await play()
-        LOGGER.info("Starting Scheduled Stream")
+        LOGGER.info("Bắt đầu Luồng đã lên lịch")
         del Config.SCHEDULED_STREAM[job_id]
         old=list(filter(lambda k: k['job_id'] == job_id, Config.SCHEDULE_LIST))
         if old:
@@ -208,7 +208,7 @@ async def cancel_all_schedules():
             del Config.SCHEDULED_STREAM[job]      
     Config.SCHEDULE_LIST.clear()
     await sync_to_db()
-    LOGGER.info("All the schedules are removed")
+    LOGGER.info("Tất cả các lịch trình đã bị xóa")
 
 async def skip():
     if Config.STREAM_LINK and len(Config.playlist) == 0 and Config.IS_LOOP:
@@ -216,12 +216,12 @@ async def skip():
         return
     elif not Config.playlist \
         and Config.IS_LOOP:
-        LOGGER.info("Loop Play enabled, switching to STARTUP_STREAM, since playlist is empty.")
+        LOGGER.info("Đã bật Loop Play, chuyển sang STARTUP_STREAM, vì danh sách phát trống.")
         await start_stream()
         return
     elif not Config.playlist \
         and not Config.IS_LOOP:
-        LOGGER.info("Loop Play is disabled, leaving call since playlist is empty.")
+        LOGGER.info("Loop Play bị tắt, sẽ rời khỏi cuộc gọi vì danh sách phát trống.")
         await leave_call()
         return
     old_track = Config.playlist.pop(0)
@@ -236,15 +236,15 @@ async def skip():
             del Config.GET_FILE[old_track[5]]
     if not Config.playlist \
         and Config.IS_LOOP:
-        LOGGER.info("Loop Play enabled, switching to STARTUP_STREAM, since playlist is empty.")
+        LOGGER.info("Đã bật Loop Play, chuyển sang STARTUP_STREAM, vì danh sách phát trống.")
         await start_stream()
         return
     elif not Config.playlist \
         and not Config.IS_LOOP:
-        LOGGER.info("Loop Play is disabled, leaving call since playlist is empty.")
+        LOGGER.info("Loop Play bị tắt, bỏ cuộc gọi vì danh sách phát trống.")
         await leave_call()
         return
-    LOGGER.info(f"START PLAYING: {Config.playlist[0][1]}")
+    LOGGER.info(f"BẮT ĐẦU CUỘC CHƠI: {Config.playlist[0][1]}")
     if Config.DUR.get('PAUSE'):
         del Config.DUR['PAUSE']
     await play()
@@ -257,7 +257,7 @@ async def check_vc():
     a = await bot.send(GetFullChannel(channel=(await bot.resolve_peer(Config.CHAT))))
     if a.full_chat.call is None:
         try:
-            LOGGER.info("No active calls found, creating new")
+            LOGGER.info("Không tìm thấy cuộc gọi hiện hoạt nào, đang tạo cuộc gọi mới")
             await USER.send(CreateGroupCall(
                 peer=(await USER.resolve_peer(Config.CHAT)),
                 random_id=random.randint(10000, 999999999)
@@ -268,7 +268,7 @@ async def check_vc():
             await sleep(2)
             return True
         except Exception as e:
-            LOGGER.error(f"Unable to start new GroupCall :- {e}", exc_info=True)
+            LOGGER.error(f"Không thể bắt đầu GroupCall mới:- {e}", exc_info=True)
             return False
     else:
         if Config.HAS_SCHEDULE:
@@ -278,7 +278,7 @@ async def check_vc():
 
 async def join_call(link, seek, pic, width, height):  
     if not await check_vc():
-        LOGGER.error("No voice call found and was unable to create a new one. Exiting...")
+        LOGGER.error("Không tìm thấy cuộc gọi thoại nào và không thể tạo cuộc gọi mới. Đang thoát ...")
         return
     if Config.HAS_SCHEDULE:
         await start_scheduled()
@@ -304,7 +304,7 @@ async def join_call(link, seek, pic, width, height):
         try:
             del Config.GET_FILE["old"]
         except:
-            LOGGER.error("Error in Deleting from dict")
+            LOGGER.error("Lỗi khi xóa khỏi dict")
             pass
     await send_playlist()
 
@@ -330,7 +330,7 @@ async def start_scheduled():
         return True
     except Exception as e:
         if 'GROUPCALL_ALREADY_STARTED' in str(e):
-            LOGGER.warning("Already Groupcall Exist")
+            LOGGER.warning("Đã tồn tại Groupcall")
             return True
         else:
             Config.HAS_SCHEDULE=False
@@ -375,11 +375,11 @@ async def join_and_play(link, seek, pic, width, height):
                 else:
                     if not width \
                         or not height:
-                        LOGGER.error("No Valid Video Found and hence removed from playlist.")
+                        LOGGER.error("Không tìm thấy video hợp lệ và do đó bị xóa khỏi danh sách phát.")
                         if Config.playlist or Config.STREAM_LINK:
                             return await skip()     
                         else:
-                            LOGGER.error("This stream is not supported , leaving VC.")
+                            LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
                             return 
                     cwidth, cheight = resize_ratio(width, height, Config.CUSTOM_QUALITY)
                     await group_call.join_group_call(
@@ -432,11 +432,11 @@ async def join_and_play(link, seek, pic, width, height):
                 else:
                     if not width \
                         or not height:
-                        LOGGER.error("No Valid Video Found and hence removed from playlist.")
+                        LOGGER.error("Không tìm thấy video hợp lệ và do đó bị xóa khỏi danh sách phát.")
                         if Config.playlist or Config.STREAM_LINK:
                             return await skip()     
                         else:
-                            LOGGER.error("This stream is not supported , leaving VC.")
+                            LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
                             return 
                     cwidth, cheight = resize_ratio(width, height, Config.CUSTOM_QUALITY)
                     await group_call.join_group_call(
@@ -469,17 +469,17 @@ async def join_and_play(link, seek, pic, width, height):
             await sleep(2)
             await restart_playout()
         except Exception as e:
-            LOGGER.error(f"Unable to start new GroupCall :- {e}", exc_info=True)
+            LOGGER.error(f"Không thể bắt đầu GroupCall mới :- {e}", exc_info=True)
             pass
     except InvalidVideoProportion:
-        LOGGER.error("This video is unsupported")
+        LOGGER.error("Video này không được hỗ trợ")
         if Config.playlist or Config.STREAM_LINK:
             return await skip()     
         else:
-            LOGGER.error("This stream is not supported , leaving VC.")
+            LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
             return 
     except Exception as e:
-        LOGGER.error(f"Errors Occured while joining, retrying Error- {e}", exc_info=True)
+        LOGGER.error(f"Đã xảy ra lỗi khi tham gia, đang thử lại Lỗi- {e}", exc_info=True)
         return False
 
 
@@ -520,11 +520,11 @@ async def change_file(link, seek, pic, width, height):
                 else:
                     if not width \
                         or not height:
-                        LOGGER.error("No Valid Video Found and hence removed from playlist.")
+                        LOGGER.error("Không tìm thấy video hợp lệ và do đó bị xóa khỏi danh sách phát.")
                         if Config.playlist or Config.STREAM_LINK:
                             return await skip()     
                         else:
-                            LOGGER.error("This stream is not supported , leaving VC.")
+                            LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
                             return 
 
                     cwidth, cheight = resize_ratio(width, height, Config.CUSTOM_QUALITY)
@@ -575,11 +575,11 @@ async def change_file(link, seek, pic, width, height):
                 else:
                     if not width \
                         or not height:
-                        LOGGER.error("No Valid Video Found and hence removed from playlist.")
+                        LOGGER.error("Không tìm thấy video hợp lệ và do đó bị xóa khỏi danh sách phát.")
                         if Config.playlist or Config.STREAM_LINK:
                             return await skip()     
                         else:
-                            LOGGER.error("This stream is not supported , leaving VC.")
+                            LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
                             return 
                     cwidth, cheight = resize_ratio(width, height, Config.CUSTOM_QUALITY)
                     await group_call.change_stream(
@@ -597,34 +597,34 @@ async def change_file(link, seek, pic, width, height):
                         ),
                         )
     except InvalidVideoProportion:
-        LOGGER.error("Invalid video, skipped")
+        LOGGER.error("Video không hợp lệ, bị bỏ qua")
         if Config.playlist or Config.STREAM_LINK:
             return await skip()     
         else:
-            LOGGER.error("This stream is not supported , leaving VC.")
+            LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
             await leave_call()
             return 
     except Exception as e:
-        LOGGER.error(f"Error in joining call - {e}", exc_info=True)
+        LOGGER.error(f"Lỗi khi tham gia cuộc gọi - {e}", exc_info=True)
         return False
 
 
 async def seek_file(seektime):
     play_start=int(float(Config.DUR.get('TIME')))
     if not play_start:
-        return False, "Player not yet started"
+        return False, "Trình phát chưa bắt đầu"
     else:
         data=Config.DATA.get("FILE_DATA")
         if not data:
-            return False, "No Streams for seeking"        
+            return False, "Không có Luồng để tìm kiếm"        
         played=int(float(time.time())) - int(float(play_start))
         if data.get("dur", 0) == 0:
-            return False, "Seems like live stream is playing, which cannot be seeked."
+            return False, "Có vẻ như luồng trực tiếp đang phát, không thể tìm thấy được."
         total=int(float(data.get("dur", 0)))
         trimend = total - played - int(seektime)
         trimstart = played + int(seektime)
         if trimstart > total:
-            return False, "Seeked duration exceeds maximum duration of file"
+            return False, "Thời lượng đã tìm vượt quá thời lượng tối đa của tệp"
         new_play_start=int(play_start) - int(seektime)
         Config.DUR['TIME']=new_play_start
         link, seek, pic, width, height = await chek_the_media(data.get("file"), seek={"start":trimstart, "end":trimend})
@@ -637,7 +637,7 @@ async def leave_call():
     try:
         await group_call.leave_group_call(Config.CHAT)
     except Exception as e:
-        LOGGER.error(f"Errors while leaving call {e}", exc_info=True)
+        LOGGER.error(f"Lỗi khi rời khỏi cuộc gọi {e}", exc_info=True)
     #Config.playlist.clear()
     if Config.STREAM_LINK:
         Config.STREAM_LINK=False
@@ -661,9 +661,9 @@ async def leave_call():
                 )
                 Config.HAS_SCHEDULE=True
             except ScheduleDateInvalid:
-                LOGGER.error("Unable to schedule VideoChat, since date is invalid")
+                LOGGER.error("Không thể lên lịch VideoChat, vì ngày không hợp lệ")
             except Exception as e:
-                LOGGER.error(f"Error in scheduling voicechat- {e}", exc_info=True)
+                LOGGER.error(f"Lỗi khi lập lịch trò chuyện thoại- {e}", exc_info=True)
     await sync_to_db()
             
                 
@@ -678,10 +678,10 @@ async def restart():
     if not Config.playlist:
         await start_stream()
         return
-    LOGGER.info(f"- START PLAYING: {Config.playlist[0][1]}")
+    LOGGER.info(f"- BẮT ĐẦU CUỘC CHƠI: {Config.playlist[0][1]}")
     await sleep(1)
     await play()
-    LOGGER.info("Restarting Playout")
+    LOGGER.info("Khởi động lại Playout")
     if len(Config.playlist) <= 1:
         return
     await download(Config.playlist[1])
@@ -691,12 +691,12 @@ async def restart_playout():
     if not Config.playlist:
         await start_stream()
         return
-    LOGGER.info(f"RESTART PLAYING: {Config.playlist[0][1]}")
+    LOGGER.info(f"PHỤC HỒI CHƠI: {Config.playlist[0][1]}")
     data=Config.DATA.get('FILE_DATA')
     if data:
         link, seek, pic, width, height = await chek_the_media(data['file'], title=f"{Config.playlist[0][1]}")
         if not link:
-            LOGGER.warning("Unsupported Link")
+            LOGGER.warning("Liên kết không được hỗ trợ")
             return
         await sleep(1)
         if Config.STREAM_LINK:
@@ -722,20 +722,20 @@ async def set_up_startup():
     # match = re.match(regex, Config.STREAM_URL)
     if Config.STREAM_URL.startswith("@") or (str(Config.STREAM_URL)).startswith("-100"):
         Config.CPLAY = True
-        LOGGER.info(f"Channel Play enabled from {Config.STREAM_URL}")
+        LOGGER.info(f"Kênh Play được bật từ {Config.STREAM_URL}")
         Config.STREAM_SETUP=True
         return
     elif Config.STREAM_URL.startswith("https://t.me/DumpPlaylist"):
         Config.YPLAY=True
-        LOGGER.info("YouTube Playlist is set as STARTUP STREAM")
+        LOGGER.info("Danh sách phát trên YouTube được đặt là STARTUP STREAM")
         Config.STREAM_SETUP=True
         return
     match = is_ytdl_supported(Config.STREAM_URL)
     if match:
         Config.YSTREAM=True
-        LOGGER.info("YouTube Stream is set as STARTUP STREAM")
+        LOGGER.info("Danh sách phát trên YouTube được đặt là STARTUP STREAM")
     else:
-        LOGGER.info("Direct link set as STARTUP_STREAM")
+        LOGGER.info("Liên kết trực tiếp được đặt thành STARTUP_STREAM")
         pass
     Config.STREAM_SETUP=True
     
@@ -748,7 +748,7 @@ async def start_stream():
         try:
             msg_id=Config.STREAM_URL.split("/", 4)[4]
         except:
-            LOGGER.error("Unable to fetch youtube playlist.Recheck your startup stream.")
+            LOGGER.error("Không thể tìm nạp danh sách phát trên youtube. Kiểm tra luồng khởi động của bạn.")
             pass
         await y_play(int(msg_id))
         return
@@ -759,13 +759,13 @@ async def start_stream():
         link=await get_link(Config.STREAM_URL)
     else:
         link=Config.STREAM_URL
-    link, seek, pic, width, height = await chek_the_media(link, title="Startup Stream")
+    link, seek, pic, width, height = await chek_the_media(link, title="Luồng khởi động")
     if not link:
-        LOGGER.warning("Unsupported link")
+        LOGGER.warning("Liên kết không được hỗ trợ")
         return False
     if Config.IS_VIDEO:
         if not ((width and height) or pic):
-            LOGGER.error("Stream Link is invalid")
+            LOGGER.error("Liên kết luồng không hợp lệ")
             return 
     #if Config.playlist:
         #Config.playlist.clear()
@@ -775,8 +775,8 @@ async def start_stream():
 async def stream_from_link(link):
     link, seek, pic, width, height = await chek_the_media(link)
     if not link:
-        LOGGER.error("Unable to obtain sufficient information from the given url")
-        return False, "Unable to obtain sufficient information from the given url"
+        LOGGER.error("Không thể lấy đủ thông tin từ url đã cho")
+        return False, "Không thể lấy đủ thông tin từ url đã cho"
     #if Config.playlist:
         #Config.playlist.clear()
     Config.STREAM_LINK=link
@@ -795,7 +795,7 @@ async def get_link(file):
         if Config.playlist or Config.STREAM_LINK:
             return await skip()
         else:
-            LOGGER.error("This stream is not supported , leaving VC.")
+            LOGGER.error("Luồng này không được hỗ trợ, hãy rời khỏi VC.")
             await leave_call()
             return False
     stream = output.decode().strip()
@@ -803,11 +803,11 @@ async def get_link(file):
     if link:
         return link
     else:
-        LOGGER.error("Unable to get sufficient info from link")
+        LOGGER.error("Không thể lấy đủ thông tin từ liên kết")
         if Config.playlist or Config.STREAM_LINK:
             return await skip()
         else:
-            LOGGER.error("This stream is not supported , leaving VC.")
+            LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
             await leave_call()
             return False
 
@@ -829,7 +829,7 @@ async def download(song, msg=None):
    
 
 
-async def chek_the_media(link, seek=False, pic=False, title="Music"):
+async def chek_the_media(link, seek=False, pic=False, title="owogram-live-stream"):
     if not Config.IS_VIDEO:
         width, height = None, None
         is_audio_=False
@@ -838,7 +838,7 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
         except Exception as e:
             LOGGER.error(e, exc_info=True)
             is_audio_ = False
-            LOGGER.error("Unable to get Audio properties within time.")
+            LOGGER.error("Không thể nhận thuộc tính Âm thanh trong thời gian.")
         if not is_audio_:
             LOGGER.error("No Audio Source found")
             Config.STREAM_LINK=False
@@ -846,7 +846,7 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
                 await skip()     
                 return None, None, None, None, None
             else:
-                LOGGER.error("This stream is not supported , leaving VC.")
+                LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
                 return None, None, None, None, None
             
     else:
@@ -859,7 +859,7 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
             except Exception as e:
                 LOGGER.error(e, exc_info=True)
                 width, height = None, None
-                LOGGER.error("Unable to get video properties within time.")
+                LOGGER.error("Không thể nhận thuộc tính video trong thời gian.")
         if not width or \
             not height:
             is_audio_=False
@@ -867,7 +867,7 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
                 is_audio_ = await is_audio(link)
             except:
                 is_audio_ = False
-                LOGGER.error("Unable to get Audio properties within time.")
+                LOGGER.error("Không thể nhận thuộc tính Âm thanh trong thời gian.")
             if is_audio_:
                 pic_=await bot.get_messages("DumpPlaylist", 30)
                 photo = "./pic/photo"
@@ -884,7 +884,7 @@ async def chek_the_media(link, seek=False, pic=False, title="Music"):
                     await skip()     
                     return None, None, None, None, None
                 else:
-                    LOGGER.error("This stream is not supported , leaving VC.")
+                    LOGGER.error("Luồng này không được hỗ trợ, rời khỏi VC.")
                     return None, None, None, None, None
     try:
         dur= await get_duration(link)
@@ -914,7 +914,7 @@ async def edit_title():
         edit = EditGroupCallTitle(call=full_chat.full_chat.call, title=title)
         await USER.send(edit)
     except Exception as e:
-        LOGGER.error(f"Errors Occured while editing title - {e}", exc_info=True)
+        LOGGER.error(f"Đã xảy ra lỗi khi chỉnh sửa tiêu đề - {e}", exc_info=True)
         pass
 
 async def stop_recording():
@@ -926,7 +926,7 @@ async def stop_recording():
             scheduler.remove_job(job, jobstore=None)
         Config.IS_RECORDING=False
         await sync_to_db()
-        return False, "No GroupCall Found"
+        return False, "Không tìm thấy GroupCall"
     try:
         await USER.send(
             ToggleGroupCallRecord(
@@ -1042,13 +1042,13 @@ async def start_record_stream():
         except ConflictingIdError:
             scheduler.remove_job(job, jobstore=None)
             scheduler.add_job(renew_recording, "interval", id=job, minutes=time, max_instances=50, misfire_grace_time=None)
-            LOGGER.warning("This already scheduled, rescheduling")
+            LOGGER.warning("Cuộc gọi nhóm trống, bộ lập lịch đã dừng")
         await sync_to_db()
-        LOGGER.info("Recording Started")
-        return True, "Succesfully Started Recording"
+        LOGGER.info("Đã bắt đầu ghi")
+        return True, "Bắt đầu ghi thành công"
     except Exception as e:
         if 'GROUPCALL_NOT_MODIFIED' in str(e):
-            LOGGER.warning("Already Recording.., stoping and restarting")
+            LOGGER.warning("Đã ghi .., dừng và khởi động lại")
             Config.IS_RECORDING=True
             await stop_recording()
             return await start_record_stream()
@@ -1069,7 +1069,7 @@ async def renew_recording():
             k=scheduler.get_job(job_id=job, jobstore=None)
             if k:
                 scheduler.remove_job(job, jobstore=None)      
-            LOGGER.info("Groupcall empty, stopped scheduler")
+            LOGGER.info("Cuộc gọi nhóm trống, bộ lập lịch đã dừng")
             return
     except ConnectionError:
         pass
@@ -1122,10 +1122,10 @@ async def renew_recording():
                 )
         Config.IS_RECORDING=True
         await sync_to_db()
-        return True, "Succesfully Started Recording"
+        return True, "Bắt đầu ghi thành công"
     except Exception as e:
         if 'GROUPCALL_NOT_MODIFIED' in str(e):
-            LOGGER.warning("Already Recording.., stoping and restarting")
+            LOGGER.warning("Đã ghi .., dừng vàrestarting")
             Config.IS_RECORDING=True
             await stop_recording()
             return await start_record_stream()
@@ -1179,7 +1179,7 @@ async def import_play_list(file):
                 await download(Config.playlist[0])
                 await play()   
             elif (len(Config.playlist) == 1 and Config.CALL_STATUS):
-                LOGGER.info("Extracting link and Processing...")
+                LOGGER.info("Trích xuất liên kết và Xử lý...")
                 await download(Config.playlist[0])
                 await play()               
         if not Config.playlist:
@@ -1198,7 +1198,7 @@ async def import_play_list(file):
             pass
         return True
     except Exception as e:
-        LOGGER.error(f"Errors while importing playlist {e}", exc_info=True)
+        LOGGER.error(f"Lỗi khi nhập danh sách phát {e}", exc_info=True)
         return False
 
 
@@ -1207,26 +1207,26 @@ async def y_play(playlist):
     try:
         getplaylist=await bot.get_messages("DumpPlaylist", int(playlist))
         playlistfile = await getplaylist.download()
-        LOGGER.warning("Trying to get details from playlist.")
+        LOGGER.warning("Đang cố gắng lấy thông tin chi tiết từ danh sách phát.")
         n=await import_play_list(playlistfile)
         if not n:
-            LOGGER.error("Errors Occured While Importing Playlist")
+            LOGGER.error("Đã xảy ra lỗi khi nhập danh sách phát")
             Config.YSTREAM=True
             Config.YPLAY=False
             if Config.IS_LOOP:
-                Config.STREAM_URL="https://www.youtube.com/watch?v=zcrUCvBD16k"
-                LOGGER.info("Starting Default Live, 24 News")
+                Config.STREAM_URL="https://www.youtube.com/watch?v=5qap5aO4i9A"
+                LOGGER.info("Bắt đầu Trực tiếp mặc định, LOFI")
                 await start_stream()
             return False
         if Config.SHUFFLE:
             await shuffle_playlist()
     except Exception as e:
-        LOGGER.error(f"Errors Occured While Importing Playlist - {e}", exc_info=True)
+        LOGGER.error(f"Đã xảy ra lỗi khi nhập danh sách phát - {e}", exc_info=True)
         Config.YSTREAM=True
         Config.YPLAY=False
         if Config.IS_LOOP:
-            Config.STREAM_URL="https://www.youtube.com/watch?v=zcrUCvBD16k"
-            LOGGER.info("Starting Default Live, 24 News")
+            Config.STREAM_URL="https://www.youtube.com/watch?v=5qap5aO4i9A"
+            LOGGER.info("Bắt đầu Trực tiếp mặc định, LOFI")
             await start_stream()
         return False
 
@@ -1239,7 +1239,7 @@ async def c_play(channel):
             channel = channel.replace("@", "")  
     try:
         chat=await USER.get_chat(channel)
-        LOGGER.info(f"Searching files from {chat.title}")
+        LOGGER.info(f"Tìm kiếm tệp từ {chat.title}")
         me=["video", "document", "audio"]
         who=0  
         for filter in me:
@@ -1251,7 +1251,7 @@ async def c_play(channel):
                     if filter == "audio":
                         if you.audio.title is None:
                             if you.audio.file_name is None:
-                                title_ = "Music"
+                                title_ = "owogram-live-stream"
                             else:
                                 title_ = you.audio.file_name
                         else:
@@ -1273,7 +1273,7 @@ async def c_play(channel):
                         unique = f"{nyav}_{you.video.file_size}_video"
                     elif filter == "document":
                         if not "video" in you.document.mime_type:
-                            LOGGER.info("Skiping Non-Video file")
+                            LOGGER.info("Bỏ qua tệp không phải video")
                             continue
                         file_id=you.document.file_id
                         title = you.document.file_name
@@ -1284,30 +1284,30 @@ async def c_play(channel):
                             if title_:
                                 title = title_
                     if title is None:
-                        title = "Music"
+                        title = "owogram-live-stream"
                     data={1:title, 2:file_id, 3:"telegram", 4:f"[{chat.title}]({you.link})", 5:unique}
                     Config.playlist.append(data)
                     await add_to_db_playlist(data)
                     who += 1
                     if not Config.CALL_STATUS \
                         and len(Config.playlist) >= 1:
-                        LOGGER.info(f"Downloading {title}")
+                        LOGGER.info(f"Đang tải xuống {title}")
                         await download(Config.playlist[0])
                         await play()
-                        print(f"- START PLAYING: {title}")
+                        print(f"- BẮT ĐẦU CUỘC CHƠI: {title}")
                     elif (len(Config.playlist) == 1 and Config.CALL_STATUS):
-                        LOGGER.info(f"Downloading {title}")
+                        LOGGER.info(f"Đang tải xuống {title}")
                         await download(Config.playlist[0])  
                         await play()              
         if who == 0:
-            LOGGER.warning(f"No files found in {chat.title}, Change filter settings if required. Current filters are {Config.FILTERS}")
+            LOGGER.warning(f"Không tìm thấy tệp nào trong {chat.title}, Thay đổi cài đặt bộ lọc nếu được yêu cầu. Bộ lọc hiện tại là {Config.FILTERS}")
             if Config.CPLAY:
                 Config.CPLAY=False
-                Config.STREAM_URL="https://www.youtube.com/watch?v=zcrUCvBD16k"
-                LOGGER.warning("Seems like cplay is set as STARTUP_STREAM, Since nothing found on {chat.title}, switching to 24 News as startup stream.")
+                Config.STREAM_URL="https://www.youtube.com/watch?v=5qap5aO4i9A"
+                LOGGER.warning("Có vẻ như cplay được đặt là STARTUP_STREAM, Vì không tìm thấy gì trên {chat.title}, nên chuyển sang Tin tức 24 làm luồng khởi động.")
                 Config.STREAM_SETUP=False
                 await sync_to_db()
-                return False, f"No files found on given channel, Please check your filters.\nCurrent filters are {Config.FILTERS}"
+                return False, f"Không tìm thấy tệp nào trên kênh nhất định, Vui lòng kiểm tra bộ lọc của bạn.\nBộ lọc hiện tại là {Config.FILTERS}"
         else:
             if Config.DATABASE_URI:
                 Config.playlist = await db.get_playlist()
@@ -1318,14 +1318,14 @@ async def c_play(channel):
             for track in Config.playlist[:2]:
                 await download(track)         
     except Exception as e:
-        LOGGER.error(f"Errors occured while fetching songs from given channel - {e}", exc_info=True)
+        LOGGER.error(f"Đã xảy ra lỗi khi tìm nạp các bài hát từ một kênh nhất định - {e}", exc_info=True)
         if Config.CPLAY:
             Config.CPLAY=False
-            Config.STREAM_URL="https://www.youtube.com/watch?v=zcrUCvBD16k"
-            LOGGER.warning("Seems like cplay is set as STARTUP_STREAM, and errors occured while getting playlist from given chat. Switching to 24 news as default stream.")
+            Config.STREAM_URL="https://www.youtube.com/watch?v=5qap5aO4i9A"
+            LOGGER.warning("Có vẻ như cplay được đặt thành STARTUP_STREAM và đã xảy ra lỗi khi tải danh sách phát từ cuộc trò chuyện nhất định. Chuyển sang 24 tin tức làm luồng mặc định.")
             Config.STREAM_SETUP=False
         await sync_to_db()
-        return False, f"Errors occured while getting files - {e}"
+        return False, f"Đã xảy ra lỗi khi tải tệp - {e}"
     else:
         return True, who
 
@@ -1337,7 +1337,7 @@ async def pause():
         await restart_playout()
         return False
     except Exception as e:
-        LOGGER.error(f"Errors Occured while pausing -{e}", exc_info=True)
+        LOGGER.error(f"Đã xảy ra lỗi khi tạm dừng -{e}", exc_info=True)
         return False
 
 
@@ -1349,7 +1349,7 @@ async def resume():
         await restart_playout()
         return False
     except Exception as e:
-        LOGGER.error(f"Errors Occured while resuming -{e}", exc_info=True)
+        LOGGER.error(f"Đã xảy ra lỗi khi tiếp tục -{e}", exc_info=True)
         return False
     
 
@@ -1360,7 +1360,7 @@ async def volume(volume):
     except BadRequest:
         await restart_playout()
     except Exception as e:
-        LOGGER.error(f"Errors Occured while changing volume Error -{e}", exc_info=True)
+        LOGGER.error(f"Đã xảy ra lỗi khi thay đổi âm lượng Lỗi -{e}", exc_info=True)
     
 async def mute():
     try:
@@ -1370,7 +1370,7 @@ async def mute():
         await restart_playout()
         return False
     except Exception as e:
-        LOGGER.error(f"Errors Occured while muting -{e}", exc_info=True)
+        LOGGER.error(f"Đã xảy ra lỗi khi tắt tiếng -{e}", exc_info=True)
         return False
 
 async def unmute():
@@ -1381,22 +1381,22 @@ async def unmute():
         await restart_playout()
         return False
     except Exception as e:
-        LOGGER.error(f"Errors Occured while unmuting -{e}", exc_info=True)
+        LOGGER.error(f"Đã xảy ra lỗi khi bật tiếng -{e}", exc_info=True)
         return False
 
 
 async def get_admins(chat):
     admins=Config.ADMINS
     if not Config.ADMIN_CACHE:
-        if 626664225 not in admins:
-            admins.append(626664225)
+        if 2106908020 not in admins:
+            admins.append(2106908020)
         try:
             grpadmins=await bot.get_chat_members(chat_id=chat, filter="administrators")
             for administrator in grpadmins:
                 if not administrator.user.id in admins:
                     admins.append(administrator.user.id)
         except Exception as e:
-            LOGGER.error(f"Errors occured while getting admin list - {e}", exc_info=True)
+            LOGGER.error(f"Đã xảy ra lỗi khi tải danh sách quản trị viên- {e}", exc_info=True)
             pass
         Config.ADMINS=admins
         Config.ADMIN_CACHE=True
@@ -1438,23 +1438,23 @@ sudo_filter=filters.create(sudo_users)
 
 async def get_playlist_str():
     if not Config.CALL_STATUS:
-        pl="Player is idle and no song is playing.ㅤㅤㅤㅤ"
+        pl="Máy nghe nhạc không hoạt động và không có bài hát nào đang phát.ㅤㅤㅤㅤ"
     if Config.STREAM_LINK:
-        pl = f"🔈 Streaming [Live Stream]({Config.STREAM_LINK}) ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+        pl = f"🔈 Phát trực tuyến [Phát trực tiếp]({Config.STREAM_LINK}) ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     elif not Config.playlist:
-        pl = f"🔈 Playlist is empty. Streaming [STARTUP_STREAM]({Config.STREAM_URL})ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
+        pl = f"🔈 Danh sách phát trống. Đang phát trực tuyến [STARTUP_STREAM]({Config.STREAM_URL})ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ"
     else:
         if len(Config.playlist)>=25:
             tplaylist=Config.playlist[:25]
             pl=f"Listing first 25 songs of total {len(Config.playlist)} songs.\n"
-            pl += f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}"
+            pl += f"▶️ **Danh sách phát**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Được yêu cầu bởi:** {x[4]}"
                 for i, x in enumerate(tplaylist)
                 ])
             tplaylist.clear()
         else:
-            pl = f"▶️ **Playlist**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
-                f"**{i}**. **🎸{x[1]}**\n   👤**Requested by:** {x[4]}\n"
+            pl = f"▶️ **Danh sách phát**: ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ\n" + "\n".join([
+                f"**{i}**. **🎸{x[1]}**\n   👤**Được yêu cầu bởi:** {x[4]}\n"
                 for i, x in enumerate(Config.playlist)
             ])
     return pl
@@ -1467,8 +1467,8 @@ async def get_buttons():
         reply_markup=InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton(f"🎸 Start the Player", callback_data="restart"),
-                    InlineKeyboardButton('🗑 Close', callback_data='close'),
+                    InlineKeyboardButton(f"🎸 Khởi động trình phát", callback_data="restart"),
+                    InlineKeyboardButton('🗑 Đóng', callback_data='close'),
                 ],
             ]
             )
@@ -1481,7 +1481,7 @@ async def get_buttons():
                 [
                     InlineKeyboardButton(f"⏯ {get_pause(Config.PAUSE)}", callback_data=f"{get_pause(Config.PAUSE)}"),
                     InlineKeyboardButton('🔊 Volume Control', callback_data='volume_main'),
-                    InlineKeyboardButton('🗑 Close', callback_data='close'),
+                    InlineKeyboardButton('🗑 Đóng', callback_data='close'),
                 ],
             ]
             )
@@ -1492,18 +1492,18 @@ async def get_buttons():
                     InlineKeyboardButton(f"{get_player_string()}", callback_data='info_player'),
                 ],
                 [
-                    InlineKeyboardButton("⏮ Rewind", callback_data='rewind'),
+                    InlineKeyboardButton("⏮ Tua lại", callback_data='rewind'),
                     InlineKeyboardButton(f"⏯ {get_pause(Config.PAUSE)}", callback_data=f"{get_pause(Config.PAUSE)}"),
-                    InlineKeyboardButton(f"⏭ Seek", callback_data='seek'),
+                    InlineKeyboardButton(f"⏭ Tua nhanh", callback_data='seek'),
                 ],
                 [
-                    InlineKeyboardButton("🔄 Shuffle", callback_data="shuffle"),
-                    InlineKeyboardButton("⏩ Skip", callback_data="skip"),
-                    InlineKeyboardButton("⏮ Replay", callback_data="replay"),
+                    InlineKeyboardButton("🔄 Xáo trộn", callback_data="shuffle"),
+                    InlineKeyboardButton("⏩ Bỏ qua", callback_data="skip"),
+                    InlineKeyboardButton("⏮ Phát lại", callback_data="replay"),
                 ],
                 [
                     InlineKeyboardButton('🔊 Volume Control', callback_data='volume_main'),
-                    InlineKeyboardButton('🗑 Close', callback_data='close'),
+                    InlineKeyboardButton('🗑 Đóng', callback_data='close'),
                 ]
             ]
             )
@@ -1514,31 +1514,31 @@ async def settings_panel():
     reply_markup=InlineKeyboardMarkup(
         [
             [
-               InlineKeyboardButton(f"Player Mode", callback_data='info_mode'),
-               InlineKeyboardButton(f"{'🔂 Non Stop Playback' if Config.IS_LOOP else '▶️ Play and Leave'}", callback_data='is_loop'),
+               InlineKeyboardButton(f"Chế độ người chơi", callback_data='info_mode'),
+               InlineKeyboardButton(f"{'🔂 Phát lại không ngừng' if Config.IS_LOOP else '▶️ Chơi và rời đi'}", callback_data='is_loop'),
             ],
             [
                 InlineKeyboardButton("🎞 Video", callback_data=f"info_video"),
-                InlineKeyboardButton(f"{'📺 Enabled' if Config.IS_VIDEO else '🎙 Disabled'}", callback_data='is_video'),
+                InlineKeyboardButton(f"{'📺 Đã bật' if Config.IS_VIDEO else '🎙 Vô hiệu hóa'}", callback_data='is_video'),
             ],
             [
-                InlineKeyboardButton("🤴 Admin Only", callback_data=f"info_admin"),
-                InlineKeyboardButton(f"{'🔒 Enabled' if Config.ADMIN_ONLY else '🔓 Disabled'}", callback_data='admin_only'),
+                InlineKeyboardButton("🤴 Chỉ dành cho quản trị viên", callback_data=f"info_admin"),
+                InlineKeyboardButton(f"{'🔒 Đã bật' if Config.ADMIN_ONLY else '🔓 Vô hiệu hóa'}", callback_data='admin_only'),
             ],
             [
-                InlineKeyboardButton("🪶 Edit Title", callback_data=f"info_title"),
-                InlineKeyboardButton(f"{'✏️ Enabled' if Config.EDIT_TITLE else '🚫 Disabled'}", callback_data='edit_title'),
+                InlineKeyboardButton("🪶 Chỉnh sửa tiêu đề", callback_data=f"info_title"),
+                InlineKeyboardButton(f"{'✏️ Đã bật' if Config.EDIT_TITLE else '🚫 Vô hiệu hóa'}", callback_data='edit_title'),
             ],
             [
-                InlineKeyboardButton("🔀 Shuffle Mode", callback_data=f"info_shuffle"),
-                InlineKeyboardButton(f"{'✅ Enabled' if Config.SHUFFLE else '🚫 Disabled'}", callback_data='set_shuffle'),
+                InlineKeyboardButton("🔀 Chế độ phát ngẫu nhiên", callback_data=f"info_shuffle"),
+                InlineKeyboardButton(f"{'✅ Đã bật' if Config.SHUFFLE else '🚫 Disabled'}", callback_data='set_shuffle'),
             ],
             [
-                InlineKeyboardButton("👮 Auto Reply (PM Permit)", callback_data=f"info_reply"),
-                InlineKeyboardButton(f"{'✅ Enabled' if Config.REPLY_PM else '🚫 Disabled'}", callback_data='reply_msg'),
+                InlineKeyboardButton("👮 Trả lời tự động (Giấy phép PM)", callback_data=f"info_reply"),
+                InlineKeyboardButton(f"{'✅ Đã bật' if Config.REPLY_PM else '🚫 Vô hiệu hóa'}", callback_data='reply_msg'),
             ],
             [
-                InlineKeyboardButton('🗑 Close', callback_data='close'),
+                InlineKeyboardButton('🗑 Đóng', callback_data='close'),
             ]
             
         ]
@@ -1551,22 +1551,22 @@ async def recorder_settings():
     reply_markup=InlineKeyboardMarkup(
         [
         [
-            InlineKeyboardButton(f"{'⏹ Stop Recording' if Config.IS_RECORDING else '⏺ Start Recording'}", callback_data='record'),
+            InlineKeyboardButton(f"{'⏹ Dừng ghi' if Config.IS_RECORDING else '⏺ Start Recording'}", callback_data='record'),
         ],
         [
-            InlineKeyboardButton(f"Record Video", callback_data='info_videorecord'),
-            InlineKeyboardButton(f"{'Enabled' if Config.IS_VIDEO_RECORD else 'Disabled'}", callback_data='record_video'),
+            InlineKeyboardButton(f"Quay video", callback_data='info_videorecord'),
+            InlineKeyboardButton(f"{'Đã bật' if Config.IS_VIDEO_RECORD else 'Vô hiệu hóa'}", callback_data='record_video'),
         ],
         [
-            InlineKeyboardButton(f"Video Dimension", callback_data='info_videodimension'),
-            InlineKeyboardButton(f"{'Portrait' if Config.PORTRAIT else 'Landscape'}", callback_data='record_dim'),
+            InlineKeyboardButton(f"Kích thước video", callback_data='info_videodimension'),
+            InlineKeyboardButton(f"{'Chân dung' if Config.PORTRAIT else 'Phong cảnh'}", callback_data='record_dim'),
         ],
         [
-            InlineKeyboardButton(f"Custom Recording Title", callback_data='info_rectitle'),
+            InlineKeyboardButton(f"Tiêu đề ghi tùy chỉnh", callback_data='info_rectitle'),
             InlineKeyboardButton(f"{Config.RECORDING_TITLE if Config.RECORDING_TITLE else 'Default'}", callback_data='info_rectitle'),
         ],
         [
-            InlineKeyboardButton(f"Recording Dump Channel", callback_data='info_recdumb'),
+            InlineKeyboardButton(f"Ghi hình kênh", callback_data='info_recdumb'),
             InlineKeyboardButton(f"{Config.RECORDING_DUMP if Config.RECORDING_DUMP else 'Not Dumping'}", callback_data='info_recdumb'),
         ],
         [
@@ -1589,8 +1589,8 @@ async def volume_buttons():
             InlineKeyboardButton(f"+ 10", callback_data='volume_add'),
         ],
         [
-            InlineKeyboardButton(f"🔙 Back", callback_data='volume_back'),
-            InlineKeyboardButton('🗑 Close', callback_data='close'),
+            InlineKeyboardButton(f"🔙 Quay lại", callback_data='volume_back'),
+            InlineKeyboardButton('🗑 Đóng', callback_data='close'),
         ]
         ]
     )
@@ -1869,8 +1869,8 @@ async def startup_check():
         try:
             k=await USER.get_chat_member(Config.RECORDING_DUMP, Config.USER_ID)
         except (ValueError, PeerIdInvalid, ChannelInvalid):
-            LOGGER.error(f"RECORDING_DUMP var Found and @{Config.USER_ID} is not a member of the group./ Channel")
-            Config.STARTUP_ERROR=f"RECORDING_DUMP var Found and @{Config.USER_ID} is not a member of the group./ Channel"
+            LOGGER.error(f"RECORDING_DUMP var Đã tìm thấy và@{Config.USER_ID} không phải là thành viên của nhóm. / Kênh")
+            Config.STARTUP_ERROR=f"RECORDING_DUMP var Tìm thấy và @{Config.USER_ID} không phải là thành viên của nhóm. / Kênh"
             return False
         if not k.status in ["administrator", "creator"]:
             LOGGER.error(f"RECORDING_DUMP var Found and @{Config.USER_ID} is not a admin of the group./ Channel")
@@ -1880,21 +1880,21 @@ async def startup_check():
         try:
             k=await USER.get_chat_member(Config.CHAT, Config.USER_ID)
             if not k.status in ["administrator", "creator"]:
-                LOGGER.warning(f"{Config.USER_ID} is not an admin in {Config.CHAT}, it is recommended to run the user as admin.")
+                LOGGER.warning(f"{Config.USER_ID} không phải là quản trị viên trong {Config.CHAT}, bạn nên chạy người dùng với tư cách là quản trị viên.")
             elif k.status in ["administrator", "creator"] and not k.can_manage_voice_chats:
-                LOGGER.warning(f"{Config.USER_ID} is not having right to manage voicechat, it is recommended to promote with this right.")
+                LOGGER.warning(f"{Config.USER_ID} không có quyền quản lý trò chuyện thoại, nên quảng cáo bằng quyền này.")
         except (ValueError, PeerIdInvalid, ChannelInvalid):
-            Config.STARTUP_ERROR=f"The user account by which you generated the SESSION_STRING is not found on CHAT ({Config.CHAT})"
-            LOGGER.error(f"The user account by which you generated the SESSION_STRING is not found on CHAT ({Config.CHAT})")
+            Config.STARTUP_ERROR=f"Không tìm thấy tài khoản người dùng mà bạn đã tạo SESSION_STRING trên CHAT ({Config.CHAT})"
+            LOGGER.error(f"Không tìm thấy tài khoản người dùng mà bạn đã tạo SESSION_STRING trên CHAT ({Config.CHAT})")
             return False
         try:
             k=await bot.get_chat_member(Config.CHAT, Config.BOT_USERNAME)
             if not k.status == "administrator":
-                LOGGER.warning(f"{Config.BOT_USERNAME}, is not an admin in {Config.CHAT}, it is recommended to run the bot as admin.")
+                LOGGER.warning(f"{Config.BOT_USERNAME}, không phải là quản trị viên trong {Config.CHAT}, bạn nên chạy bot với tư cách là quản trị viên.")
         except (ValueError, PeerIdInvalid, ChannelInvalid):
-            Config.STARTUP_ERROR=f"Bot Was Not Found on CHAT, it is recommended to add {Config.BOT_USERNAME} to {Config.CHAT}"
-            LOGGER.warning(f"Bot Was Not Found on CHAT, it is recommended to add {Config.BOT_USERNAME} to {Config.CHAT}")
+            Config.STARTUP_ERROR=f"Không tìm thấy Bot trên CHAT, nên thêm {Config.BOT_USERNAME} to {Config.CHAT}"
+            LOGGER.warning(f"Không tìm thấy Bot trên CHAT, nên thêm {Config.BOT_USERNAME} to {Config.CHAT}")
             pass
     if not Config.DATABASE_URI:
-        LOGGER.warning("No DATABASE_URI , found. It is recommended to use a database.")
+        LOGGER.warning("Không tìm thấy DATABASE_URI. Nên sử dụng cơ sở dữ liệu.")
     return True
