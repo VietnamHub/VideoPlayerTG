@@ -6,7 +6,7 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/subinps/VCPlayerBot?style=flat)
 ![GitHub forks](https://img.shields.io/github/forks/subinps/VCPlayerBot?style=flat)
 
-Telegram bot to stream videos in telegram voicechat for both groups and channels. Supports live streams, YouTube videos and telegram media. With record stream support, Schedule streams, and many more.
+Telegram bot để truyền phát video trong cuộc trò chuyện thoại telegram cho cả nhóm và kênh. Hỗ trợ các luồng trực tiếp, video YouTube và phương tiện điện tín. Với hỗ trợ luồng bản ghi, Lên lịch luồng và nhiều hơn nữa.
 
 ## Config Vars:
 ### Mandatory Vars
@@ -57,7 +57,7 @@ Telegram bot to stream videos in telegram voicechat for both groups and channels
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/gimsuri69/VideoPlayerTG)
 
 ## Deploy to Railway
-<p><a href=https://github.com/RimuruVN/VideoPlayerTG/issues/7> <img src="https://img.shields.io/badge/Deploy%20To%20Railway-blueviolet?style=for-the-badge&logo=railway" width="200""/></a></p>
+<p><a href=https://github.com/gimsuri69/VideoPlayerTG/issues/7> <img src="https://img.shields.io/badge/Deploy%20To%20Railway-blueviolet?style=for-the-badge&logo=railway" width="200""/></a></p>
 
  
 ## Deploy to VPS
@@ -72,17 +72,17 @@ python3 main.py
 
 ## Features
 
-- Playlist, queue.
-- Zero downtime in playing.
-- Supports Video Recording.
-- Supports Scheduling voicechats.
-- Cool UI for controling the player.
-- Customizabe to audio or video.
-- Custom quality for video chats.
-- Supports Play from Youtube Playlist.
-- Change VoiceChat title to current playing song name.
-- Supports Live streaming from youtube
-- Play from telegram file supported.
-- Starts Radio after if no songs in playlist.
-- Automatic restart even if heroku restarts. (Configurable)
-- Support exporting and importing playlist.
+- Danh sách phát, hàng đợi.
+- Không có thời gian chết khi chơi.
+- Hỗ trợ quay video.
+- Hỗ trợ lên lịch thoại.
+- Giao diện người dùng tuyệt vời để điều khiển trình phát.
+- Tùy chỉnh âm thanh hoặc video.
+- Chất lượng tùy chỉnh cho các cuộc trò chuyện video.
+- Hỗ trợ chơi từ danh sách phát trên Youtube.
+- Thay đổi tiêu đề VoiceChat thành tên bài hát đang phát hiện tại.
+- Hỗ trợ phát trực tiếp từ youtube
+- Phát từ tệp telegram được hỗ trợ.
+- Bắt đầu Radio sau khi không có bài hát trong danh sách.
+- Tự động khởi động lại ngay cả khi heroku khởi động lại. (Có thể cấu hình)
+- Hỗ trợ xuất và nhập danh sách phát.
