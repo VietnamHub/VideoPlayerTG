@@ -31,9 +31,14 @@ from pyrogram import (
 
 buttons = [
     [
-        InlineKeyboardButton('⚡️ Nhóm', url='https://t.me/vietnamhub'),
-        InlineKeyboardButton('🧩 Kênh', url='https://t.me/joinchat/ug0cFfrfD3Q1MDll'),
-    ]
+        InlineKeyboardButton('⚡️ Bánh Bao Thịt', url='https://t.me/+S5obLSW8ChIxNjA1'),
+    ],
+    [
+        InlineKeyboardButton('🔞 Cybersex Việt Nam', url='https://t.me/joinchat/ug0cFfrfD3Q1MDll'),
+    ],
+    [
+        InlineKeyboardButton('APP XEM LIVE FREE 🆓', url='https://qql849.com'),
+    ],
     ]
 def get_cmd(dur):
     if dur:
