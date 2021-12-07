@@ -59,7 +59,7 @@ class Config:
     #Optional Configuration
     SHUFFLE=is_enabled(os.environ.get("SHUFFLE", 'True'))
     ADMIN_ONLY=is_enabled(os.environ.get("ADMIN_ONLY", "False"))
-    REPLY_MESSAGE=os.environ.get("REPLY_MESSAGE", "Tham gia nhóm chat https://t.me/VietnamHub")
+    REPLY_MESSAGE=os.environ.get("REPLY_MESSAGE", "Em đang live trên app QQL849.COM nên không thể rep anh được, anh tải app về rồi vào room để nói chuyện với em nha!")
     EDIT_TITLE = os.environ.get("EDIT_TITLE", False)
     #others
     
