@@ -41,16 +41,16 @@ async def main():
                 msg=await db.get_config("RESTART")
                 if msg:
                     try:
-                        k=await bot.edit_message_text(msg['chat_id'], msg['msg_id'], text="Khởi động lại thành công.")
+                        k=await bot.edit_message_text(msg['chat_id'], msg['msg_id'], text="Succesfully restarted.")
                         await db.del_config("RESTART")
                     except:
                         pass
             await check_changes()
             await sync_from_db()
         except Exception as e:
-            LOGGER.error(f"Đã xảy ra lỗi khi thiết lập cơ sở dữ liệu cho VCPlayerBot, hãy kiểm tra giá trị của DATABASE_URI. Toàn lỗi - {str(e)}", exc_info=True)
-            Config.STARTUP_ERROR="Đã xảy ra lỗi khi thiết lập cơ sở dữ liệu cho VCPlayerBot, hãy kiểm tra giá trị của DATABASE_URI. Toàn lỗi - {str(e)}"
-            LOGGER.info("Kích hoạt chế độ gỡ lỗi, bạn có thể định cấu hình lại bot của mình bằng lệnh /env.")
+            LOGGER.error(f"Errors occured while setting up database for VCPlayerBot, check the value of DATABASE_URI. Full error - {str(e)}", exc_info=True)
+            Config.STARTUP_ERROR="Errors occured while setting up database for VCPlayerBot, check the value of DATABASE_URI. Full error - {str(e)}"
+            LOGGER.info("Activating debug mode, you can reconfigure your bot with /env command.")
             await bot.stop()
             from utils import debug
             await debug.start()
@@ -58,8 +58,8 @@ async def main():
             return
 
     if Config.DEBUG:
-        LOGGER.info("Người dùng đã bật gỡ lỗi, Hiện đang ở chế độ gỡ lỗi.")
-        Config.STARTUP_ERROR="Người dùng đã bật gỡ lỗi, Hiện đang ở chế độ gỡ lỗi."
+        LOGGER.info("Debugging enabled by user, Now in debug mode.")
+        Config.STARTUP_ERROR="Debugging enabled by user, Now in debug mode."
         from utils import debug
         await bot.stop()
         await debug.start()
@@ -71,9 +71,9 @@ async def main():
         Config.USER_ID = (await USER.get_me()).id
         k=await startup_check()
         if k == False:
-            LOGGER.error("Kiểm tra khởi động không được thông qua, bot đang hoạt động")
+            LOGGER.error("Startup checks not passed , bot is quiting")
             await bot.stop()
-            LOGGER.info("Kích hoạt chế độ gỡ lỗi, bạn có thể định cấu hình lại bot của mình bằng lệnh /env.")
+            LOGGER.info("Activating debug mode, you can reconfigure your bot with /env command.")
             from utils import debug
             await debug.start()
             await idle()
@@ -82,14 +82,14 @@ async def main():
         if Config.IS_LOOP:
             if Config.playlist:
                 await play()
-                LOGGER.info("Đã bật tính năng phát lặp lại và danh sách phát không trống, đang tiếp tục danh sách phát.")
+                LOGGER.info("Loop play enabled and playlist is not empty, resuming playlist.")
             else:
-                LOGGER.info("Đã bật tính năng phát vòng lặp, bắt đầu phát luồng khởi động.")
+                LOGGER.info("Loop play enabled , starting playing startup stream.")
                 await start_stream()
     except Exception as e:
-        LOGGER.error(f"Khởi động không thành công, Lỗi - {e}", exc_info=True)
-        LOGGER.info("Kích hoạt chế độ gỡ lỗi, bạn có thể định cấu hình lại bot của mình bằng lệnh /env.")
-        Config.STARTUP_ERROR=f"Khởi động không thành công, Lỗi - {e}"
+        LOGGER.error(f"Startup was unsuccesfull, Errors - {e}", exc_info=True)
+        LOGGER.info("Activating debug mode, you can reconfigure your bot with /env command.")
+        Config.STARTUP_ERROR=f"Startup was unsuccesfull, Errors - {e}"
         from utils import debug
         await bot.stop()
         await debug.start()
@@ -101,6 +101,5 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.get_event_loop().run_until_complete(main())
-
 
 
